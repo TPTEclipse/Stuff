@@ -149,7 +149,7 @@
 
     <main>
       <div class="player-info">
-        <div id="game-name">No game loaded</div>
+        <div id="game-name">Loading…</div>
         <a href="games.html">Back to Games</a>
       </div>
 
@@ -158,8 +158,8 @@
       </div>
 
       <div class="no-game" id="no-game-msg" style="display: none;">
-        No game specified. Go back to the <a href="games.html">games page</a> and
-        choose one.
+        No game specified.<br />
+        Go back to the <a href="games.html">games page</a> and pick one.
       </div>
     </main>
 
@@ -173,11 +173,16 @@
       const nameEl = document.getElementById("game-name");
 
       if (game) {
-        frame.src = game;
-        nameEl.textContent = decodeURIComponent(game).split("/").pop();
+        const decoded = decodeURIComponent(game);
+
+        // Basic debug in the title so you can see what it's trying to load
+        nameEl.textContent = decoded.split("/").pop() || decoded;
+
+        frame.src = decoded;
       } else {
         wrap.style.display = "none";
         noGame.style.display = "flex";
+        nameEl.textContent = "No game loaded";
       }
     </script>
   </body>
