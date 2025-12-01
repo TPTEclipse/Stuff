@@ -3,8 +3,8 @@
   // Same presets as settings page
   const TAB_PRESETS = {
     default: {
-      title: "Scramjet Hub",
-      favicon: "favicon.webp",
+      title: "S0LACE",
+      favicon: "favicon.ico",
     },
     gdocs: {
       title: "Untitled document - Google Docs",
@@ -16,7 +16,7 @@
     },
     gdrive: {
       title: "My Drive - Google Drive",
-      favicon: "https://ssl.gstatic.com/docs/doclist/images/drive_16.png",
+      favicon: "https://ssl.gstatic.com/docs/doclist/images/drive_icon_16.png",
     },
     khan: {
       title: "Dashboard | Khan Academy",
@@ -44,7 +44,7 @@
     const savedTitle = localStorage.getItem("sjTabTitle") || "";
     const savedFav = localStorage.getItem("sjTabFavicon") || "";
 
-    let finalTitle = document.title || "Scramjet Hub";
+    let finalTitle = document.title || "S0LACE";
     let finalFav = null;
 
     if (mode === "custom") {
