@@ -25,9 +25,9 @@ Project S0lace is a self-hostable, open-source web proxy + entertainment hub des
 | Dark/Light Theme         | ✅ Done     | Easy on the eyes                              |
 | No Login Required        | ✅ Done     | Just open and use                             |
 
-## 🖥️ Live Demo (if hosted)
+## 🖥️ Live Demo 
 
-https://your-s0lace-domain.example  *(replace with your actual link)*
+https://project-s0lace.onrender.com
 
 ## 🚀 Quick Deploy (Free Options)
 
@@ -36,6 +36,6 @@ https://your-s0lace-domain.example  *(replace with your actual link)*
 2. Go to [render.com](https://render.com) → New Web Service
 3. Connect your GitHub fork
 4. Settings:
-   - Build Command: `npm install && npm run build` (or just deploy static if using prebuilt)
-   - Start Command: 
+   - Build Command: `npm install --omit=dev`
+   - Start Command: `npm scr/index.js`
 5. Deploy 
