@@ -10,24 +10,24 @@
 		minRatio: 9 / 24,
 
 		title: 'Stunt Bike Extreme',
-		thumbnail: 'd115380307564d68096317ffd29cbcf9.png',
+		thumbnail: 'https:\/\/img.poki-cdn.com\/d115380307564d68096317ffd29cbcf9.png',
 		numScreenshots:  4 ,
 
 		unityVersion: '2022.3.17f1',
 		unityWebglBuildUrl: '',
 
-		fileSize:  50 ,
+		fileSize:  54 ,
 		cachedDecompressedFileSizes: {
-			'50469b7eb926d518830d3623a0ec028c.wasm':  40368008 ,
-			'97ea6da3054dfb0c957cc4556e6249e8.js':  408130 ,
-			'WebGL.loader.js':  20467 ,
-			'f53bde23dbc809997d318c85b4ac3ed1.data':  9864229 ,
+			'5ecc075fda761d59f89f44a362014e2a.data':  11247628 ,
+			'TrialPoki.loader.js':  20672 ,
+			'b806da33a7fccef4566489cac05c5c4e.js':  421552 ,
+			'ea277229002e6d5d665aa7fd9508b8ea.wasm':  42512021 ,
 		},
-		"metadata": {"poki_template_version":1,"background_color":"#231F20","code_filename":"50469b7eb926d518830d3623a0ec028c.wasm","company_name":"Hyperkani","data_filename":"f53bde23dbc809997d318c85b4ac3ed1.data","development_player":"false","framework_filename":"97ea6da3054dfb0c957cc4556e6249e8.js","height":"600","loader_filename":"WebGL.loader.js","product_name":"Stunt Bike Extreme","product_version":"0.502","splash_screen_style":"Dark","unity_version":"2022.3.17f1","use_data_caching":"true","use_threads":"false","use_wasm":"true","use_webgl_1_0":"true","use_webgl_2_0":"true","width":"960"}
+		"metadata": {"poki_template_version":1,"background_color":"#231F20","code_filename":"ea277229002e6d5d665aa7fd9508b8ea.wasm","company_name":"Hyperkani","data_filename":"5ecc075fda761d59f89f44a362014e2a.data","development_player":"false","framework_filename":"b806da33a7fccef4566489cac05c5c4e.js","height":"600","loader_filename":"TrialPoki.loader.js","product_name":"Stunt Bike Extreme","product_version":"0.515","splash_screen_style":"Dark","unity_version":"2022.3.17f1","use_data_caching":"true","use_threads":"false","use_wasm":"true","use_webgl_1_0":"false","use_webgl_2_0":"true","width":"960"}
 	};
 	</script>
 <!-- will be copied to the resulting head //-->
-<script src="https://m.igroutka.ru/files/scripts/poki/poki-sdk-core-.js" type="text/javascript" crossorigin="anonymous"></script><style type="text/css">* {
+<script src="https://game-cdn.poki.com/scripts/c7da3488788e142bff1da1f1e4dcaa08e4a735c7/poki-sdk-core-c7da3488788e142bff1da1f1e4dcaa08e4a735c7.js" type="text/javascript" crossorigin="anonymous"></script><style>* {
     margin: 0;
     padding: 0;
 }
@@ -77,8 +77,8 @@ body {
 @font-face {
     font-family: Torus;
     src:
-        url('//a.poki.com/fonts/torus-bold-webfont.woff2') format('woff2'),
-        url('//a.poki.com/fonts/torus-bold-webfont.woff') format('woff');
+        url('//a.poki-cdn.com/fonts/torus-bold-webfont.woff2') format('woff2'),
+        url('//a.poki-cdn.com/fonts/torus-bold-webfont.woff') format('woff');
     font-style: bold;
     font-weight: 700;
 }
@@ -481,22 +481,33 @@ body {
 	}
 
 </style><style>
-.pokiSdkContainer1 {display: none}
+.pokiSdkContainer {
+	overflow: hidden;
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 99999;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
 
-.pokiSdkContainer1.pokiSdkFixed {
+.pokiSdkContainer.pokiSdkFixed {
 	position: fixed;
 }
 
-.pokiSdkContainer1.pokiSdkVisible {
+.pokiSdkContainer.pokiSdkVisible {
 	display: block;
 }
 
-.pokiSdkContainer1.pokiSdkHidden,
+.pokiSdkContainer.pokiSdkHidden,
 .pokiSdkSpinnerContainer.pokiSdkHidden {
 	display: none;
 }
 
-.pokiSdkContainer1.pokiSdkHidden,
+.pokiSdkContainer.pokiSdkHidden,
 .pokiSdkSpinnerContainer {
 	pointer-events: none;
 }
@@ -508,7 +519,7 @@ body {
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background: url('https://a.poki.com/images/thumb_anim_2x.gif') 50% 50% no-repeat;
+	background: url('https://a.poki-cdn.com/images/thumb_anim_2x.gif') 50% 50% no-repeat;
 	user-select: none;
 }
 
@@ -530,7 +541,7 @@ body {
 	transition: opacity 0.5s ease-in-out;
 }
 
-.pokiSdkContainer1.pokiSdkVisible .pokiSdkInsideContainer {
+.pokiSdkContainer.pokiSdkVisible .pokiSdkInsideContainer {
 	opacity: 1;
 }
 
@@ -568,6 +579,7 @@ body {
 .pokiSdkPauseButtonBG {
     content: '';
     background: rgba(0, 43, 80, 0.5);
+    display: block;
     position: absolute;
     top: 0;
     left: 0;
@@ -652,7 +664,7 @@ body {
 	pointer-events: auto;
 }
 
-.pokiSdkProgressBar.pokiSdkHidden, .pokiSdkPauseButtonContainer.pokiSdkHidden, .pokiSdkStartAdButton.pokiSdkHidden {
+.pokiSdkProgressBar.pokiSdkHidden, .pokiSdkPauseButtonContainer.pokiSdkHidden, .pokiSdkStartAdButton.pokiSdkHidden, .pokiSDKNrAdsContainer.pokiSdkHidden {
 	display: none;
 	pointer-events: none;
 }
@@ -665,14 +677,24 @@ body {
 	cursor: pointer;
 }
 
-</style><script type="text/javascript" async="" src="https://s.net/tag/js/gpt.js"></script><script type="text/javascript" async="" src="https://m.igroutka.ru/files/scripts/scr2.js"></script><script type="text/javascript" async="" src="https://a.com/prebid/prebid8.36.0-2.js"></script><script type="text/javascript" async="" src="https://m.com/aax2/apstag.js"></script></head>
+.pokiSDKNrAdsContainer {
+	bottom: 10px;
+	position: absolute;
+	left: 10px;
+	z-index: 9999;
+	color: #FFF;
+	font: 700 9pt 'Arial', sans-serif;
+	filter: drop-shadow(0 0 0.2rem black);
+}
+
+</style><script type="text/javascript" async="" src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script><script type="text/javascript" async="" src="https://imasdk.googleapis.com/js/sdkloader/ima3.js"></script><script type="text/javascript" async="" src="https://a.poki-cdn.com/prebid/prebid_1759232497.js"></script><script type="text/javascript" async="" src="https://c.amazon-adsystem.com/aax2/apstag.js"></script><meta http-equiv="origin-trial" content="AlK2UR5SkAlj8jjdEc9p3F3xuFYlF6LYjAML3EOqw1g26eCwWPjdmecULvBH5MVPoqKYrOfPhYVL71xAXI1IBQoAAAB8eyJvcmlnaW4iOiJodHRwczovL2RvdWJsZWNsaWNrLm5ldDo0NDMiLCJmZWF0dXJlIjoiV2ViVmlld1hSZXF1ZXN0ZWRXaXRoRGVwcmVjYXRpb24iLCJleHBpcnkiOjE3NTgwNjcxOTksImlzU3ViZG9tYWluIjp0cnVlfQ=="><meta http-equiv="origin-trial" content="Amm8/NmvvQfhwCib6I7ZsmUxiSCfOxWxHayJwyU1r3gRIItzr7bNQid6O8ZYaE1GSQTa69WwhPC9flq/oYkRBwsAAACCeyJvcmlnaW4iOiJodHRwczovL2dvb2dsZXN5bmRpY2F0aW9uLmNvbTo0NDMiLCJmZWF0dXJlIjoiV2ViVmlld1hSZXF1ZXN0ZWRXaXRoRGVwcmVjYXRpb24iLCJleHBpcnkiOjE3NTgwNjcxOTksImlzU3ViZG9tYWluIjp0cnVlfQ=="><meta http-equiv="origin-trial" content="A9nrunKdU5m96PSN1XsSGr3qOP0lvPFUB2AiAylCDlN5DTl17uDFkpQuHj1AFtgWLxpLaiBZuhrtb2WOu7ofHwEAAACKeyJvcmlnaW4iOiJodHRwczovL2RvdWJsZWNsaWNrLm5ldDo0NDMiLCJmZWF0dXJlIjoiQUlQcm9tcHRBUElNdWx0aW1vZGFsSW5wdXQiLCJleHBpcnkiOjE3NzQzMTA0MDAsImlzU3ViZG9tYWluIjp0cnVlLCJpc1RoaXJkUGFydHkiOnRydWV9"><meta http-equiv="origin-trial" content="A93bovR+QVXNx2/38qDbmeYYf1wdte9EO37K9eMq3r+541qo0byhYU899BhPB7Cv9QqD7wIbR1B6OAc9kEfYCA4AAACQeyJvcmlnaW4iOiJodHRwczovL2dvb2dsZXN5bmRpY2F0aW9uLmNvbTo0NDMiLCJmZWF0dXJlIjoiQUlQcm9tcHRBUElNdWx0aW1vZGFsSW5wdXQiLCJleHBpcnkiOjE3NzQzMTA0MDAsImlzU3ViZG9tYWluIjp0cnVlLCJpc1RoaXJkUGFydHkiOnRydWV9"><meta http-equiv="origin-trial" content="A1S5fojrAunSDrFbD8OfGmFHdRFZymSM/1ss3G+NEttCLfHkXvlcF6LGLH8Mo5PakLO1sCASXU1/gQf6XGuTBgwAAACQeyJvcmlnaW4iOiJodHRwczovL2dvb2dsZXRhZ3NlcnZpY2VzLmNvbTo0NDMiLCJmZWF0dXJlIjoiQUlQcm9tcHRBUElNdWx0aW1vZGFsSW5wdXQiLCJleHBpcnkiOjE3NzQzMTA0MDAsImlzU3ViZG9tYWluIjp0cnVlLCJpc1RoaXJkUGFydHkiOnRydWV9"><script src="https://securepubads.g.doubleclick.net/pagead/managed/js/gpt/m202511120101/pubads_impl.js?cb=31095927" async=""></script><link href="https://securepubads.g.doubleclick.net/pagead/managed/dict/m202512040101/gpt" rel="compression-dictionary"></head>
 <body>
-	<script src="https://m.igroutka.ru/files/scripts/poki/master-loader.js"></script><script src="https://m.igroutka.ru/files/scripts/poki/poki-sdk.js"></script>
+	<script src="https://game-cdn.poki.com/loaders/v3/master-loader.js"></script><script src="https://game-cdn.poki.com/scripts/v2/poki-sdk.js"></script><script src="https://game-cdn.poki.com/loaders/v3/unity-2020.js"></script>
 <!-- will be copied to the resulting body //-->
 <!-- will also be copied to the resulting body //-->
 
 
-<script src="https://m.igroutka.ru/files/scripts/poki/unity-2020.js"></script><div id="loader"><div id="slideshow" class="active"><div id="slideshow-top" class="active"><img id="thumbnail" alt="Stunt Bike Extreme" title="Stunt Bike Extreme" src="d115380307564d68096317ffd29cbcf9.png"><div id="slideshow-top-container"><div id="game-title">Stunt Bike Extreme</div><div id="progress-spinner" class="spinner"><div class="bounce0"></div><div class="bounce1"></div><div class="bounce2"></div></div><div id="progress-container"><div id="progress-bar"><div id="progress-fill" style="width: 4.62054%;"></div></div><div id="progress-amount" style="width: 12vh; white-space: nowrap;">4% of 50MB</div></div><div id="progress-comment">Loading...</div></div></div><div id="slideshow-images"><div class="image middle" fullimageloaded="true" data-idx="0"><img src="https://g.igroutka.ru/games/793/2xTdm6GrXEuN0Kwq/fe831138-3321-40ed-b8cd-f1c482091e04/screenshots/1.jpg"></div><div class="image right" data-idx="1"><img src="screenshots/2-small.jpg"></div><div class="image inactive" data-idx="2"><img src="screenshots/3-small.jpg"></div><div class="image left" data-idx="3"><img src="screenshots/4-small.jpg"></div></div><div id="slideshow-nav"><div class="bullet active" data-idx="0"></div><div class="bullet" data-idx="1"></div><div class="bullet" data-idx="2"></div><div class="bullet" data-idx="3"></div></div></div></div><div id="game-container" style="width: 1365px; height: 911px; margin-left: 0px; margin-top: 0px;"><canvas id="game"></canvas></div><div class="pokiSdkContainer1 pokiSdkHidden pokiSdkFixed"><div class="pokiSdkInsideContainer"><div class="pokiSdkProgressContainer pokiSdkHidden"><div class="pokiSdkProgressBar" style="width: 0%;"></div></div><video id="pokiSDKVideoContainer" class="pokiSdkVideoContainer" playsinline="playsinline" muted="muted"></video><div id="pokiSDKAdContainer" class="pokiSDKAdContainer"></div></div><div class="pokiSdkSpinnerContainer"></div><div class="pokiSdkPauseButtonContainer pokiSdkHidden"><div class="pokiSdkPauseButton"></div><div class="pokiSdkPauseButtonBG"></div></div><div class="pokiSdkStartAdButton pokiSdkHidden">Tap anywhere to play ad</div></div><script src="Build/WebGL.loader.js"></script><style>
+<div id="loader"><div id="slideshow" class="active"><div id="slideshow-top" class="active"><img id="thumbnail" alt="Stunt Bike Extreme" title="Stunt Bike Extreme" src="https://img.poki-cdn.com/cdn-cgi/image/quality=78,width=40,height=40,fit=cover,g=0.5x0.5,f=auto/d115380307564d68096317ffd29cbcf9.png"><div id="slideshow-top-container"><div id="game-title">Stunt Bike Extreme</div><div id="progress-spinner" class="spinner"><div class="bounce0"></div><div class="bounce1"></div><div class="bounce2"></div></div><div id="progress-container"><div id="progress-bar"><div id="progress-fill" style="width: 90%;"></div></div><div id="progress-amount" style="width: 12vh; white-space: nowrap;">90% of 54MB</div></div><div id="progress-comment">Loading...</div></div></div><div id="slideshow-images"><div class="image middle" fullimageloaded="true" data-idx="0"><img src="https://ebc4c103-f3c6-4eef-a5ec-5fc2bfc3de71.poki-gdn.com/cdn-cgi/image/f=auto,quality=78/8f2cf214-8a6d-4236-9479-097e1029c603/screenshots/1.jpg"></div><div class="image right" data-idx="1"><img src="/cdn-cgi/image/f=auto,quality=78/8f2cf214-8a6d-4236-9479-097e1029c603/screenshots/2-small.jpg"></div><div class="image inactive" data-idx="2"><img src="/cdn-cgi/image/f=auto,quality=78/8f2cf214-8a6d-4236-9479-097e1029c603/screenshots/3-small.jpg"></div><div class="image left" data-idx="3"><img src="/cdn-cgi/image/f=auto,quality=78/8f2cf214-8a6d-4236-9479-097e1029c603/screenshots/4-small.jpg"></div></div><div id="slideshow-nav"><div class="bullet active" data-idx="0"></div><div class="bullet" data-idx="1"></div><div class="bullet" data-idx="2"></div><div class="bullet" data-idx="3"></div></div></div></div><div id="game-container" style="width: 1365px; height: 911px; margin-left: 0px; margin-top: 0px;"><canvas id="game"></canvas></div><div class="pokiSdkContainer pokiSdkHidden pokiSdkFixed"><div class="pokiSdkInsideContainer"><div class="pokiSdkProgressContainer pokiSdkHidden"><div class="pokiSdkProgressBar" style="width: 0%;"></div></div><video id="pokiSDKVideoContainer" class="pokiSdkVideoContainer" playsinline="playsinline" muted="muted"></video><div id="pokiSDKAdContainer" class="pokiSDKAdContainer"><iframe id="poki-rewarded-web-iframe" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 9999; border: none; background: transparent; visibility: hidden; pointer-events: none;"></iframe><iframe id="poki-interstitial-web-iframe" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 9999; border: none; background: transparent; visibility: hidden; pointer-events: none;"></iframe></div></div><div class="pokiSdkSpinnerContainer"></div><div class="pokiSDKNrAdsContainer pokiSdkHidden"></div><div class="pokiSdkPauseButtonContainer pokiSdkHidden"><div class="pokiSdkPauseButton"></div><div class="pokiSdkPauseButtonBG"></div></div><div class="pokiSdkStartAdButton pokiSdkHidden">Tap anywhere to play ad</div></div><script src="Build/TrialPoki.loader.js"></script><script src="Build/b806da33a7fccef4566489cac05c5c4e.js"></script><style>
 		#slideshow-images {
 			height: 50.34467618002195vh;
 		}
@@ -696,4 +718,4 @@ body {
 		#slideshow-images .inactive.fromRight {
 			transform: translateX(130vw) scale(0.4);
 		}
-	</style><script src="Build/97ea6da3054dfb0c957cc4556e6249e8.js"></script></body></html>
+	</style></body></html>
