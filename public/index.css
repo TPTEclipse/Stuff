@@ -51,6 +51,10 @@ body {
       transparent 1px,
       transparent 16px
     );
+
+  /* make header + main flex so player can fill screen */
+  display: flex;
+  flex-direction: column;
 }
 
 a {
@@ -71,6 +75,7 @@ a {
   background: rgba(0, 0, 0, 0.98);
   border-bottom: 3px solid var(--border-hard);
   box-shadow: 0 0 0 1px #000, 0 6px 0 #000, 0 0 24px rgba(0, 255, 127, 0.2);
+  flex-shrink: 0;
 }
 
 .site-title {
@@ -144,6 +149,8 @@ main {
   padding: 18px 12px 32px;
   max-width: 1200px;
   margin: 0 auto;
+  width: 100%;
+  flex: 1; /* so player pages can stretch */
 }
 
 .page-header {
@@ -180,18 +187,18 @@ h1::after {
   color: var(--accent);
 }
 
-/* ========= HOME PAGE / PROXY ========= */
+/* ========= HOME / PROXY ========= */
 
-.home-layout {
-  display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 18px;
+.home-title-block {
+  margin-bottom: 18px;
 }
 
-@media (max-width: 860px) {
-  .home-layout {
-    grid-template-columns: 1fr;
-  }
+.home-proxy-panel {
+  margin-bottom: 18px;
+}
+
+.home-popular-panel {
+  margin-top: 4px;
 }
 
 .home-panel {
@@ -288,7 +295,7 @@ h1::after {
   margin-top: 2px;
 }
 
-/* iframe for proxied page */
+/* iframe for proxied page (Scramjet uses this) */
 #sj-frame {
   border: none;
   position: absolute;
@@ -299,7 +306,78 @@ h1::after {
   background-color: #000;
 }
 
-/* ========= DUNGEON GRIDS (games/media/apps reuse) ========= */
+/* ========= POPULAR GAMES STRIP ========= */
+
+.popular-wrap {
+  margin-top: 10px;
+  overflow: hidden;
+  border: 2px solid var(--border-hard);
+  background: radial-gradient(circle at center, #101010 0, #000000 70%);
+  box-shadow: 0 0 0 1px #000, 0 0 22px rgba(0, 0, 0, 0.9);
+  padding: 6px 0;
+}
+
+.popular-track {
+  display: inline-flex;
+  align-items: stretch;
+  gap: 8px;
+  white-space: nowrap;
+  animation: s0lace-popular-scroll 38s linear infinite;
+  padding-left: 8px;
+}
+
+.popular-wrap:hover .popular-track {
+  animation-play-state: paused;
+}
+
+.popular-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 0;
+  border: 2px solid var(--border-hard);
+  background: #000;
+  text-decoration: none;
+  color: var(--fg);
+  font-size: 8px;
+  cursor: pointer;
+  box-shadow: 0 0 0 1px #000;
+}
+
+.popular-pill:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 16px rgba(0, 255, 127, 0.55);
+}
+
+.pill-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 0;
+  border: 1px solid #333;
+  background-size: cover;
+  background-position: center;
+  background-color: #050505;
+  image-rendering: pixelated;
+  flex-shrink: 0;
+}
+
+.pill-name {
+  white-space: nowrap;
+}
+
+/* marquee-style scroll */
+@keyframes s0lace-popular-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* ========= DUNGEON GRIDS (games / apps / media) ========= */
 
 .games-search-wrap {
   margin: 10px 0 18px;
@@ -318,7 +396,9 @@ h1::after {
   white-space: nowrap;
 }
 
-#game-search {
+#game-search,
+#app-search,
+#media-search {
   flex: 1;
   padding: 7px 10px;
   border-radius: 0;
@@ -330,22 +410,32 @@ h1::after {
   outline: none;
 }
 
-#game-search::placeholder {
+#game-search::placeholder,
+#app-search::placeholder,
+#media-search::placeholder {
   color: #444;
 }
 
-#game-search:focus {
+#game-search:focus,
+#app-search:focus,
+#media-search:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 1px #000, 0 0 12px rgba(0, 255, 127, 0.5);
 }
 
-.game-grid {
+.game-grid,
+.app-grid,
+.media-grid {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 14px;
 }
 
-.game-card {
+/* base card */
+
+.game-card,
+.app-card,
+.media-card {
   background: var(--panel);
   border-radius: 0;
   padding: 6px;
@@ -361,7 +451,9 @@ h1::after {
   overflow: hidden;
 }
 
-.game-card::after {
+.game-card::after,
+.app-card::after,
+.media-card::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -377,7 +469,10 @@ h1::after {
   pointer-events: none;
 }
 
-.game-thumb {
+/* thumbs */
+
+.game-thumb,
+.app-thumb {
   width: 100%;
   aspect-ratio: 1 / 1;
   border-radius: 0;
@@ -391,7 +486,23 @@ h1::after {
   border: 2px solid #151515;
 }
 
-.game-thumb img {
+.poster-thumb {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  border-radius: 0;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0;
+  overflow: hidden;
+  position: relative;
+  border: 2px solid #151515;
+}
+
+.game-thumb img,
+.app-thumb img,
+.poster-thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -400,7 +511,9 @@ h1::after {
   filter: saturate(0.9) contrast(1.05);
 }
 
-.game-overlay {
+.game-overlay,
+.app-overlay,
+.media-overlay {
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.8);
@@ -416,18 +529,26 @@ h1::after {
   text-shadow: 0 0 6px rgba(0, 255, 127, 0.7);
 }
 
-.game-card:hover .game-overlay {
+.game-card:hover .game-overlay,
+.app-card:hover .app-overlay,
+.media-card:hover .media-overlay {
   opacity: 1;
 }
 
-.game-card:hover {
+.game-card:hover,
+.app-card:hover,
+.media-card:hover {
   transform: translateY(-2px);
   border-color: var(--accent);
   background: var(--panel-alt);
   box-shadow: 0 0 0 1px #000, 0 0 20px rgba(0, 255, 127, 0.45);
 }
 
-#game-empty {
+/* "no results" text */
+
+#game-empty,
+#app-empty,
+#media-empty {
   display: none;
   margin-top: 12px;
   font-size: 8px;
@@ -438,18 +559,18 @@ h1::after {
   max-width: 260px;
 }
 
-/* ========= SHARED PLAYER LAYOUT ========= */
+/* ========= SHARED PLAYER LAYOUT (games + media) ========= */
 
-.player-main {
+main.player-main {
   flex: 1;
   padding: 12px 10px 12px;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  min-height: 0;
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
   width: 100%;
+  min-height: calc(100vh - var(--header-h));
 }
 
 .player-info {
@@ -471,6 +592,7 @@ h1::after {
 .player-actions {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .player-actions button,
@@ -526,7 +648,9 @@ h1::after {
 /* ========= RESPONSIVE ========= */
 
 @media (max-width: 1024px) {
-  .game-grid {
+  .game-grid,
+  .app-grid,
+  .media-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
@@ -545,7 +669,9 @@ h1::after {
     padding: 3px 6px;
   }
 
-  .game-grid {
+  .game-grid,
+  .app-grid,
+  .media-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
@@ -554,7 +680,9 @@ h1::after {
   body {
     font-size: 9px;
   }
-  .game-grid {
+  .game-grid,
+  .app-grid,
+  .media-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
