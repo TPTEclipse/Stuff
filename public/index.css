@@ -464,12 +464,23 @@ h1::after {
   box-shadow: 0 0 0 1px #000, 0 0 12px rgba(0, 255, 127, 0.5);
 }
 
+/* shared grid base */
 .game-grid,
 .app-grid,
 .media-grid {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 14px;
+}
+
+/* 8 per row for games */
+.game-grid {
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+}
+
+/* 6 per row for apps/media (keep them chunkier) */
+.app-grid,
+.media-grid {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
 }
 
 /* base card */
