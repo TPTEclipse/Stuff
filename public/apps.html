@@ -4,20 +4,83 @@
     <meta charset="utf-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+      content="width=device-width, initial-scale=1.0"
     />
     <title>S0LACE • Apps</title>
 
     <link rel="shortcut icon" content="favicon.ico" />
     <link rel="stylesheet" href="index.css" />
     <script src="global-hub.js" defer></script>
+
+    <!-- Local styles just for apps layout + square icons -->
+    <style>
+      .apps-section-title {
+        font-size: 13px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        opacity: 0.8;
+        margin: 14px 0 8px;
+      }
+
+      .apps-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 14px;
+        margin-top: 8px;
+      }
+
+      .app-card {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .app-thumb {
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #050505;
+        border: 1px solid rgba(255, 255, 255, 0.04);
+      }
+
+      .app-thumb img {
+        width: 100%;
+        aspect-ratio: 1 / 1; /* square icons */
+        object-fit: cover;
+        display: block;
+      }
+
+      .app-overlay {
+        position: absolute;
+        inset: auto 0 0 0;
+        padding: 6px 8px;
+        font-size: 11px;
+        background: linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.85),
+          rgba(0, 0, 0, 0.4),
+          transparent
+        );
+      }
+
+      .app-title-text {
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      #apps-empty {
+        display: none;
+        font-size: 8px;
+        color: #7f7f7f;
+        margin-top: 10px;
+      }
+    </style>
   </head>
 
   <body>
     <header class="site-header">
-      <div class="site-title">
-        S0LACE
-      </div>
+      <div class="site-title">S0LACE</div>
       <nav class="site-nav">
         <a href="index.html">Home</a>
         <a href="games.html">Games</a>
@@ -32,73 +95,221 @@
         <h1>Apps</h1>
       </div>
 
+      <!-- SEARCH BAR -->
       <div class="games-search-wrap">
-        <span class="search-label">FIND &gt;</span>
+        <span class="search-label">SEARCH &gt;</span>
         <input
-          id="app-search"
+          id="apps-search"
           type="text"
-          placeholder="search apps..."
+          placeholder="search your apps..."
           autocomplete="off"
         />
       </div>
 
-      <div class="app-grid" id="app-grid">
-        <!-- Replace href + thumbs later with real apps/tools -->
-        <a
-          class="app-card"
-          href="apps-launcher.html?src=/scramjet/https://tiktok.com"
-          data-name="Tiktok"
-        >
-          <div class="app-thumb">
-            <img
-              src="thumbs/apps/tiktok.png"
-              alt="tiktok"
-            />
-            <div class="app-overlay">TikTok</div>
-          </div>
-        </a>
+      <section class="apps-section">
+        <h2 class="apps-section-title">Apps</h2>
 
-        <a
-          class="app-card"
-          href="apps-launcher.html?src=/scramjet/https://chatgptfree.ai/chat/"
-          data-name="chatgpt"
-        >
-          <div class="app-thumb">
-            <img
-              src="thumbs/apps/chatgpt2.png"
-              alt="tiktok"
-            />
-            <div class="app-overlay">ChatGPT</div>
-          </div>
-        </a>
+        <div class="apps-grid" id="apps-grid">
+          <!-- STICKY "SUGGEST APP" CARD (always at top) -->
+          <a
+            class="app-card"
+            href="https://forms.gle/VH47pgHw1kWAFuDY6"
+            data-title="Suggest an app"
+            data-stick="top"
+            target="_blank"
+          >
+            <div class="app-thumb">
+              <img src="thumbs/suggestions.jpeg" alt="Suggest an app" />
+              <div class="app-overlay">
+                <span class="app-title-text">Suggest an app</span>
+              </div>
+            </div>
+          </a>
 
-      <div id="app-empty">No apps match that search.</div>
+          <!-- ACTUAL APPS (edit these href/srcs however you want) -->
+          <a
+            class="app-card"
+            href="#"
+            data-title="YouTube"
+            data-src="/scramjet/https://www.youtube.com"
+          >
+            <div class="app-thumb">
+              <img src="thumbs/youtube.png" alt="YouTube" />
+              <div class="app-overlay">
+                <span class="app-title-text">YouTube</span>
+              </div>
+            </div>
+          </a>
+
+          <a
+            class="app-card"
+            href="#"
+            data-title="Discord"
+            data-src="/scramjet/https://discord.com/app"
+          >
+            <div class="app-thumb">
+              <img src="thumbs/discord.png" alt="Discord" />
+              <div class="app-overlay">
+                <span class="app-title-text">Discord</span>
+              </div>
+            </div>
+          </a>
+
+          <a
+            class="app-card"
+            href="#"
+            data-title="Spotify"
+            data-src="/scramjet/https://open.spotify.com"
+          >
+            <div class="app-thumb">
+              <img src="thumbs/spotify.png" alt="Spotify" />
+              <div class="app-overlay">
+                <span class="app-title-text">Spotify</span>
+              </div>
+            </div>
+          </a>
+
+          <a
+            class="app-card"
+            href="#"
+            data-title="Reddit"
+            data-src="/scramjet/https://www.reddit.com"
+          >
+            <div class="app-thumb">
+              <img src="thumbs/reddit.png" alt="Reddit" />
+              <div class="app-overlay">
+                <span class="app-title-text">Reddit</span>
+              </div>
+            </div>
+          </a>
+
+          <a
+            class="app-card"
+            href="#"
+            data-title="Google Docs"
+            data-src="/scramjet/https://docs.google.com"
+          >
+            <div class="app-thumb">
+              <img src="thumbs/gdocs.png" alt="Google Docs" />
+              <div class="app-overlay">
+                <span class="app-title-text">Google Docs</span>
+              </div>
+            </div>
+          </a>
+
+          <a
+            class="app-card"
+            href="#"
+            data-title="Twitch"
+            data-src="/scramjet/https://www.twitch.tv"
+          >
+            <div class="app-thumb">
+              <img src="thumbs/twitch.png" alt="Twitch" />
+              <div class="app-overlay">
+                <span class="app-title-text">Twitch</span>
+              </div>
+            </div>
+          </a>
+
+          <!-- add more apps here using same structure -->
+        </div>
+
+        <div id="apps-empty">
+          No apps match that search.
+        </div>
+      </section>
     </main>
 
     <script>
-      const appSearch = document.getElementById("app-search");
-      const appCards = Array.from(document.querySelectorAll(".app-card"));
-      const appEmpty = document.getElementById("app-empty");
+      const appsSearch = document.getElementById("apps-search");
+      const appsGrid = document.getElementById("apps-grid");
+      const appsEmpty = document.getElementById("apps-empty");
 
-      function filterApps() {
-        const q = (appSearch.value || "").trim().toLowerCase();
-        let visible = 0;
+      // collect all cards
+      let appCards = Array.from(document.querySelectorAll(".app-card"));
 
-        appCards.forEach((card) => {
-          const name = (card.dataset.name || "").toLowerCase();
-          const match = !q || name.includes(q);
-          card.style.display = match ? "" : "none";
-          if (match) visible++;
+      // ===== A–Z SORT (except sticky "top" card) =====
+      function sortAppsAZ() {
+        if (!appsGrid) return;
+
+        const sticky = appCards.filter(
+          (c) => c.dataset.stick && c.dataset.stick.toLowerCase() === "top"
+        );
+        const normal = appCards.filter(
+          (c) => !(c.dataset.stick && c.dataset.stick.toLowerCase() === "top")
+        );
+
+        normal.sort((a, b) => {
+          const ta = (a.dataset.title || "").toLowerCase();
+          const tb = (b.dataset.title || "").toLowerCase();
+          if (ta < tb) return -1;
+          if (ta > tb) return 1;
+          return 0;
         });
 
-        if (appEmpty) {
-          appEmpty.style.display = q && visible === 0 ? "block" : "none";
+        appsGrid.innerHTML = "";
+        sticky.forEach((c) => appsGrid.appendChild(c));
+        normal.forEach((c) => appsGrid.appendChild(c));
+
+        // refresh list reference
+        appCards = [...sticky, ...normal];
+      }
+
+      // ===== OPEN VIA MEDIAPLAYER (proxied) =====
+      function goToAppPlayer(title, src) {
+        if (!src) return;
+        const url =
+          "mediaplayer.html?src=" +
+          encodeURIComponent(src) +
+          "&title=" +
+          encodeURIComponent(title || "Untitled");
+        window.location.href = url;
+      }
+
+      function wireAppClicks() {
+        appCards.forEach((card) => {
+          const stickTop = card.dataset.stick === "top";
+          if (stickTop) {
+            // "Suggest app" should just go to Google Form in new tab
+            return;
+          }
+          card.addEventListener("click", (e) => {
+            e.preventDefault();
+            const title = card.dataset.title || "Untitled";
+            const src = card.dataset.src || "";
+            if (!src) return;
+            goToAppPlayer(title, src);
+          });
+        });
+      }
+
+      // ===== SEARCH FILTER =====
+      function filterApps() {
+        const q = (appsSearch.value || "").trim().toLowerCase();
+        let visibleCount = 0;
+
+        appCards.forEach((card) => {
+          const title = (card.dataset.title || "").toLowerCase();
+          const match = !q || title.includes(q);
+          card.style.display = match ? "" : "none";
+          if (match) visibleCount++;
+        });
+
+        if (appsEmpty) {
+          appsEmpty.style.display = q && visibleCount === 0 ? "block" : "none";
         }
       }
 
-      if (appSearch) {
-        appSearch.addEventListener("input", filterApps);
-      }
+      document.addEventListener("DOMContentLoaded", () => {
+        sortAppsAZ();
+        wireAppClicks();
+
+        if (appsSearch) {
+          appsSearch.addEventListener("input", filterApps);
+        }
+
+        filterApps();
+      });
     </script>
   </body>
 </html>
