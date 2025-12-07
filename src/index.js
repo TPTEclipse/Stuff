@@ -23,8 +23,21 @@ const fastify = Fastify({
   serverFactory: (handler) => {
     return createServer()
       .on("request", (req, res) => {
-        res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
-        res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
+        // ------------------------------------------------------------------
+        // ✅ Apply COOP/COEP ONLY for Scramjet proxy resources
+        //    This prevents TMDB posters & external images from breaking.
+        // ------------------------------------------------------------------
+        if (
+          req.url.startsWith("/scram/") ||
+          req.url.startsWith("/baremux/") ||
+          req.url.startsWith("/epoxy/") ||
+          req.url.startsWith("/wisp/")
+        ) {
+          res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
+          res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
+        }
+
+        // Continue normally
         handler(req, res);
       })
       .on("upgrade", (req, socket, head) => {
@@ -34,33 +47,39 @@ const fastify = Fastify({
   },
 });
 
+// Static public files
 fastify.register(fastifyStatic, {
   root: publicPath,
   decorateReply: true,
 });
 
+// Scramjet static files
 fastify.register(fastifyStatic, {
   root: scramjetPath,
   prefix: "/scram/",
   decorateReply: false,
 });
 
+// Epoxy static files
 fastify.register(fastifyStatic, {
   root: epoxyPath,
   prefix: "/epoxy/",
   decorateReply: false,
 });
 
+// BareMux static files
 fastify.register(fastifyStatic, {
   root: baremuxPath,
   prefix: "/baremux/",
   decorateReply: false,
 });
 
+// 404 Handler
 fastify.setNotFoundHandler((res, reply) => {
   return reply.code(404).type("text/html").sendFile("404.html");
 });
 
+// Logging listener
 fastify.server.on("listening", () => {
   const address = fastify.server.address();
   console.log("Listening on:");
@@ -73,6 +92,7 @@ fastify.server.on("listening", () => {
   );
 });
 
+// Shutdown handlers
 process.on("SIGINT", shutdown);
 process.on("SIGTERM", shutdown);
 
@@ -82,6 +102,7 @@ function shutdown() {
   process.exit(0);
 }
 
+// Port config
 let port = parseInt(process.env.PORT || "");
 if (isNaN(port)) port = 8080;
 
