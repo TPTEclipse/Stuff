@@ -23,50 +23,63 @@ const fastify = Fastify({
   serverFactory: (handler) => {
     return createServer()
       .on("request", (req, res) => {
-        // NO COOP / COEP HERE – it was breaking TMDB & external sites
+        // ------------------------------------------------------------------
+        // ✅ Apply COOP/COEP ONLY for Scramjet proxy resources
+        //    This prevents TMDB posters & external images from breaking.
+        // ------------------------------------------------------------------
+        if (
+          req.url.startsWith("/scram/") ||
+          req.url.startsWith("/baremux/") ||
+          req.url.startsWith("/epoxy/") ||
+          req.url.startsWith("/wisp/")
+        ) {
+          res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
+          res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
+        }
+
+        // Continue normally
         handler(req, res);
       })
       .on("upgrade", (req, socket, head) => {
-        if (req.url.endsWith("/wisp/")) {
-          wisp.routeRequest(req, socket, head);
-        } else {
-          socket.end();
-        }
+        if (req.url.endsWith("/wisp/")) wisp.routeRequest(req, socket, head);
+        else socket.end();
       });
   },
 });
 
-// main site
+// Static public files
 fastify.register(fastifyStatic, {
   root: publicPath,
   decorateReply: true,
 });
 
-// Scramjet bundle – **PREFIX IS /scramjet/**
+// Scramjet static files
 fastify.register(fastifyStatic, {
   root: scramjetPath,
-  prefix: "/scramjet/",
+  prefix: "/scram/",
   decorateReply: false,
 });
 
-// Epoxy
+// Epoxy static files
 fastify.register(fastifyStatic, {
   root: epoxyPath,
   prefix: "/epoxy/",
   decorateReply: false,
 });
 
-// BareMux
+// BareMux static files
 fastify.register(fastifyStatic, {
   root: baremuxPath,
   prefix: "/baremux/",
   decorateReply: false,
 });
 
-fastify.setNotFoundHandler((req, reply) => {
+// 404 Handler
+fastify.setNotFoundHandler((res, reply) => {
   return reply.code(404).type("text/html").sendFile("404.html");
 });
 
+// Logging listener
 fastify.server.on("listening", () => {
   const address = fastify.server.address();
   console.log("Listening on:");
@@ -75,10 +88,11 @@ fastify.server.on("listening", () => {
   console.log(
     `\thttp://${
       address.family === "IPv6" ? `[${address.address}]` : address.address
-    }:${address.port}`,
+    }:${address.port}`
   );
 });
 
+// Shutdown handlers
 process.on("SIGINT", shutdown);
 process.on("SIGTERM", shutdown);
 
@@ -88,6 +102,7 @@ function shutdown() {
   process.exit(0);
 }
 
+// Port config
 let port = parseInt(process.env.PORT || "");
 if (isNaN(port)) port = 8080;
 
