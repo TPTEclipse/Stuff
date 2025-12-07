@@ -32,41 +32,73 @@
         <h1>Media</h1>
       </div>
 
+      <!-- LOCAL FILTER -->
       <div class="games-search-wrap">
-        <span class="search-label">FIND &gt;</span>
+        <span class="search-label">FILTER &gt;</span>
         <input
           id="media-search"
           type="text"
-          placeholder="search media..."
+          placeholder="filter your media cards..."
           autocomplete="off"
         />
       </div>
 
-      <div class="media-grid" id="media-grid">
-        <!-- data-title used for search
-             data-src   is what mediaplayer.html will iframe -->
-       <a
-  class="media-card"
-  href="#"
-  data-title="Interstellar"
-  data-src="/scramjet/https://cinemaos.live/player/157336"
->
-  <div class="poster-thumb">
-    <img src="thumbs/interstellar-poster.jpg" alt="" />
-    <div class="media-overlay">BROKEN</div>
-  </div>
-</a>
+      <!-- TMDB SEARCH -->
+      <div class="games-search-wrap">
+        <span class="search-label">TMDB &gt;</span>
+        <input
+          id="tmdb-search"
+          type="text"
+          placeholder="search TMDB (movies & shows)..."
+          autocomplete="off"
+        />
+      </div>
+      <div id="tmdb-results" style="margin-top:6px; font-size:10px;"></div>
 
-        <!-- add more media-card blocks here -->
+      <div class="media-grid" id="media-grid">
+        <!-- Example card using TMDB ID for Interstellar (id: 157336) -->
+        <a
+          class="media-card"
+          href="#"
+          data-title="Interstellar"
+          data-tmdb-id="157336"
+        >
+          <div class="poster-thumb">
+            <img src="thumbs/interstellar-poster.jpg" alt="Interstellar" />
+            <div class="media-overlay">Interstellar</div>
+          </div>
+        </a>
+
+        <!-- You can keep adding cards.
+             Either:
+             - data-src="/scramjet/https://cinemaos.live/player/ID"
+             OR
+             - data-tmdb-id="THE_TMDB_ID"
+        -->
+
+        <!-- EXAMPLE: custom thing you hard-wire -->
+        <a
+          class="media-card"
+          href="#"
+          data-title="Some Custom Stream"
+          data-src="/scramjet/https://example.com/custom-player"
+        >
+          <div class="poster-thumb">
+            <img src="thumbs/custom-example.jpg" alt="Custom" />
+            <div class="media-overlay">Custom Stream</div>
+          </div>
+        </a>
       </div>
 
       <div id="media-empty">No media matches that search.</div>
     </main>
 
     <script>
+      // ====== LOCAL FILTER FOR YOUR STATIC CARDS ======
       const mediaSearch = document.getElementById("media-search");
       const mediaCards = Array.from(document.querySelectorAll(".media-card"));
       const mediaEmpty = document.getElementById("media-empty");
+      const mediaGrid = document.getElementById("media-grid");
 
       function filterMedia() {
         const q = (mediaSearch.value || "").trim().toLowerCase();
@@ -88,23 +120,133 @@
         mediaSearch.addEventListener("input", filterMedia);
       }
 
-      // click -> mediaplayer.html
+      // ====== CLICK HANDLER FOR STATIC CARDS ======
+      function goToPlayerFromCard(card) {
+        const title =
+          card.dataset.title ||
+          card.querySelector(".media-overlay")?.textContent.trim() ||
+          "Untitled";
+
+        let src = card.dataset.src || "";
+        const tmdbId = card.dataset.tmdbId;
+
+        // If TMDB id is provided, build cinemaos URL through Scramjet
+        if (!src && tmdbId) {
+          src = "/scramjet/https://cinemaos.live/player/" + tmdbId;
+        }
+
+        if (!src) return;
+
+        const url =
+          "mediaplayer.html?src=" +
+          encodeURIComponent(src) +
+          "&title=" +
+          encodeURIComponent(title);
+
+        window.location.href = url;
+      }
+
       mediaCards.forEach((card) => {
         card.addEventListener("click", (e) => {
           e.preventDefault();
-          const src = card.dataset.src;
-          const title = card.dataset.title || "Untitled";
-          if (!src) return;
-
-          const url =
-            "mediaplayer.html?src=" +
-            encodeURIComponent(src) +
-            "&title=" +
-            encodeURIComponent(title);
-
-          window.location.href = url;
+          goToPlayerFromCard(card);
         });
       });
+
+      // ====== TMDB SEARCH → OPEN CINEMAOS PLAYER ======
+      const TMDB_KEY = "2d1351cf74f73892042699d0431b799a"; // <-- set this
+      const tmdbInput = document.getElementById("tmdb-search");
+      const tmdbResults = document.getElementById("tmdb-results");
+
+      async function searchTmdb(query) {
+        if (!TMDB_KEY || TMDB_KEY === "2d1351cf74f73892042699d0431b799a") {
+          tmdbResults.textContent =
+            "TMDB key not set. Edit TMDB_KEY in media.html.";
+          return;
+        }
+
+        const q = query.trim();
+        if (!q) {
+          tmdbResults.textContent = "";
+          return;
+        }
+
+        tmdbResults.textContent = "Searching TMDB…";
+
+        try {
+          const url =
+            "https://api.themoviedb.org/3/search/multi?api_key=" +
+            TMDB_KEY +
+            "&language=en-US&include_adult=false&query=" +
+            encodeURIComponent(q);
+
+          const res = await fetch(url);
+          if (!res.ok) throw new Error("TMDB request failed");
+
+          const data = await res.json();
+          const results = (data.results || []).filter((item) =>
+            ["movie", "tv"].includes(item.media_type)
+          );
+
+          if (!results.length) {
+            tmdbResults.textContent = "No matches on TMDB.";
+            return;
+          }
+
+          // Build simple result list
+          tmdbResults.innerHTML = "";
+          const list = document.createElement("div");
+
+          results.slice(0, 10).forEach((item) => {
+            const id = item.id;
+            const title = item.title || item.name || "Untitled";
+            const year =
+              (item.release_date || item.first_air_date || "").slice(0, 4);
+            const kind = item.media_type === "tv" ? "TV" : "Movie";
+
+            const row = document.createElement("div");
+            row.style.cursor = "pointer";
+            row.style.padding = "3px 0";
+
+            row.textContent =
+              "[" + kind + "] " + title + (year ? " (" + year + ")" : "");
+
+            row.addEventListener("click", () => {
+              // always use cinemaos.live/player/{id}
+              const src =
+                "/scramjet/https://cinemaos.live/player/" + String(id);
+
+              const url =
+                "mediaplayer.html?src=" +
+                encodeURIComponent(src) +
+                "&title=" +
+                encodeURIComponent(title);
+
+              window.location.href = url;
+            });
+
+            list.appendChild(row);
+          });
+
+          tmdbResults.appendChild(list);
+        } catch (err) {
+          console.error(err);
+          tmdbResults.textContent = "TMDB error: " + err.message;
+        }
+      }
+
+      if (tmdbInput) {
+        tmdbInput.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            searchTmdb(tmdbInput.value || "");
+          }
+        });
+        tmdbInput.addEventListener("blur", () => {
+          // optional: search on blur too
+          if (tmdbInput.value.trim()) searchTmdb(tmdbInput.value);
+        });
+      }
 
       document.addEventListener("DOMContentLoaded", filterMedia);
     </script>
