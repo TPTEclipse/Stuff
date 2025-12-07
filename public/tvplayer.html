@@ -19,7 +19,7 @@
     <script src="register-sw.js" defer></script>
     <script src="global-hub.js" defer></script>
 
-    <!-- TV-only layout styles (side widget) -->
+    <!-- TV-only layout styles (big frame left, season list right) -->
     <style>
       .tv-player-main {
         display: flex;
@@ -35,65 +35,16 @@
         min-height: 0;
       }
 
-      .tv-side {
-        width: 230px;
-        max-width: 260px;
-        border: 2px solid var(--border-hard, #262626);
-        background: radial-gradient(circle at top left, #101010 0, #050505 60%);
-        padding: 10px;
-        font-size: 9px;
+      /* left side = big player (frame styles mostly come from index.css) */
+      .tv-frame-wrap {
+        flex: 1;
+        min-height: calc(100vh - 150px);
         display: flex;
         flex-direction: column;
-        gap: 10px;
       }
 
-      .tv-side h2 {
-        margin: 0;
-        font-size: 10px;
-        text-transform: uppercase;
-      }
-
-      .tv-meta {
-        font-size: 8px;
-        color: var(--fg-dim, #7f7f7f);
-      }
-
-      .tv-select-row {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-      }
-
-      .tv-select-row label {
-        font-size: 8px;
-        color: var(--fg-dim, #7f7f7f);
-      }
-
-      .tv-select-row select {
-        font-size: 9px;
-        padding: 4px 6px;
-        border-radius: 0;
-        border: 2px solid var(--border-hard, #262626);
-        background: #000;
-        color: var(--fg, #f5f5f5);
-        font-family: inherit;
-        outline: none;
-      }
-
-      .tv-select-row select:focus {
-        border-color: var(--accent, #00ff7f);
-        box-shadow: 0 0 0 1px #000, 0 0 12px rgba(0, 255, 127, 0.5);
-      }
-
-      .tv-side-note {
-        font-size: 8px;
-        color: var(--fg-dim, #7f7f7f);
-        line-height: 1.5;
-      }
-
-      .tv-season-info {
-        font-size: 8px;
-        color: var(--fg-dim, #7f7f7f);
+      .player-frame-wrap {
+        position: relative;
       }
 
       .player-loading {
@@ -114,15 +65,111 @@
         text-align: center;
         padding: 16px;
       }
+
       .player-loading span {
         margin-top: 6px;
         opacity: 0.7;
       }
-      .player-frame-wrap {
-        position: relative;
+
+      /* right side = season/episode sidebar */
+      .tv-side {
+        width: 260px;
+        max-width: 260px;
+        border: 2px solid var(--border-hard, #262626);
+        background: radial-gradient(circle at top left, #101010 0, #050505 60%);
+        padding: 10px;
+        font-size: 9px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
       }
 
-      @media (max-width: 800px) {
+      .tv-side h2 {
+        margin: 0;
+        font-size: 11px;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+      }
+
+      .tv-meta {
+        font-size: 8px;
+        color: var(--fg-dim, #7f7f7f);
+      }
+
+      .tv-season-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .tv-season-tab {
+        font-size: 8px;
+        padding: 3px 8px;
+        border-radius: 0;
+        border: 2px solid var(--border-hard, #262626);
+        background: #000;
+        color: var(--fg-dim, #aaaaaa);
+        cursor: pointer;
+        text-transform: uppercase;
+      }
+
+      .tv-season-tab.active {
+        border-color: var(--accent, #00ff7f);
+        color: var(--accent, #00ff7f);
+        background: rgba(0, 255, 127, 0.12);
+        box-shadow: 0 0 0 1px #000, 0 0 14px rgba(0, 255, 127, 0.5);
+      }
+
+      .tv-episode-header {
+        font-size: 8px;
+        color: var(--fg-dim, #7f7f7f);
+        text-transform: uppercase;
+        margin-top: 2px;
+      }
+
+      .tv-episode-list {
+        flex: 1;
+        margin-top: 4px;
+        border: 1px solid var(--border-hard, #262626);
+        background: #020617;
+        padding: 4px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+      }
+
+      .tv-episode-item {
+        font-size: 8px;
+        padding: 4px 6px;
+        text-align: left;
+        background: #000;
+        border: 1px solid #111827;
+        color: var(--fg, #f5f5f5);
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        gap: 6px;
+      }
+
+      .tv-episode-item span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .tv-episode-item.active {
+        border-color: var(--accent, #00ff7f);
+        color: var(--accent, #00ff7f);
+        background: rgba(0, 255, 127, 0.15);
+      }
+
+      .tv-season-info {
+        font-size: 8px;
+        color: var(--fg-dim, #7f7f7f);
+      }
+
+      @media (max-width: 900px) {
         .tv-layout {
           flex-direction: column;
         }
@@ -130,6 +177,9 @@
           width: 100%;
           max-width: none;
           order: -1;
+        }
+        .tv-frame-wrap {
+          min-height: 60vh;
         }
       }
     </style>
@@ -159,48 +209,37 @@
       </div>
 
       <div class="tv-layout">
-        <!-- SIDE PANEL: seasons / episodes -->
-        <aside class="tv-side">
-          <h2 id="tv-title-short">TV SHOW</h2>
-          <div class="tv-meta" id="tv-meta">Loading TMDB data…</div>
+        <!-- LEFT: big player -->
+        <div class="tv-frame-wrap">
+          <div class="player-frame-wrap">
+            <div id="player-loading" class="player-loading">
+              CONNECTING TO PROXY…
+              <span id="player-loading-sub">
+                If this takes more than a few seconds, the media host or proxy might be slow.
+              </span>
+            </div>
 
-          <div class="tv-select-row">
-            <label for="season-select">Season</label>
-            <select id="season-select"></select>
+            <iframe
+              id="media-frame"
+              src="about:blank"
+              allowfullscreen
+              allow="fullscreen; picture-in-picture; encrypted-media"
+            ></iframe>
           </div>
-
-          <div class="tv-select-row">
-            <label for="episode-select">Episode</label>
-            <select id="episode-select"></select>
-          </div>
-
-          <div class="tv-season-info" id="season-info"></div>
-
-          <div class="tv-side-note">
-            Uses CinemaOS:
-            <br />
-            <code style="font-size:7px;">
-              https://cinemaos.tech/player/{id}/{season}/{episode}
-            </code>
-          </div>
-        </aside>
-
-        <!-- MAIN FRAME -->
-        <div class="player-frame-wrap">
-          <div id="player-loading" class="player-loading">
-            CONNECTING TO PROXY…
-            <span id="player-loading-sub">
-              If this takes more than a few seconds, the media host or proxy might be slow.
-            </span>
-          </div>
-
-          <iframe
-            id="media-frame"
-            src="about:blank"
-            allowfullscreen
-            allow="fullscreen; picture-in-picture; encrypted-media"
-          ></iframe>
         </div>
+
+        <!-- RIGHT: season / episode sidebar -->
+        <aside class="tv-side">
+          <h2 id="tv-title-short">SEASONS</h2>
+          <div id="tv-meta" class="tv-meta">Loading TMDB data…</div>
+
+          <div id="season-tabs" class="tv-season-tabs"></div>
+
+          <div class="tv-episode-header">EPISODES</div>
+          <div id="episode-list" class="tv-episode-list"></div>
+
+          <div id="season-info" class="tv-season-info"></div>
+        </aside>
       </div>
 
       <div id="player-error" class="no-src" style="display:none;">
@@ -213,37 +252,35 @@
       const TMDB_KEY = "2d1351cf74f73892042699d0431b799a";
 
       const params = new URLSearchParams(window.location.search);
-      const tvId = params.get("id");       // TMDB show id
+      const tvId = params.get("id");
       const tvTitle = params.get("title") || "Untitled";
-      const initialSeason = parseInt(params.get("season") || "1", 10);
-      const initialEpisode = parseInt(params.get("episode") || "1", 10);
+      let currentSeason = parseInt(params.get("season") || "1", 10);
+      let currentEpisode = parseInt(params.get("episode") || "1", 10);
 
       const frame = document.getElementById("media-frame");
       const titleEl = document.getElementById("player-title");
       const titleShortEl = document.getElementById("tv-title-short");
       const metaEl = document.getElementById("tv-meta");
-      const seasonSelect = document.getElementById("season-select");
-      const episodeSelect = document.getElementById("episode-select");
+      const seasonTabsEl = document.getElementById("season-tabs");
+      const episodeListEl = document.getElementById("episode-list");
       const seasonInfoEl = document.getElementById("season-info");
       const errorEl = document.getElementById("player-error");
       const loadingEl = document.getElementById("player-loading");
       const loadingSub = document.getElementById("player-loading-sub");
       const openNewTabBtn = document.getElementById("open-new-tab");
 
-      let seasonsData = [];
-      let currentSeason = initialSeason;
-      let currentEpisode = initialEpisode;
-
+      let seasonsMeta = []; // from /tv/{id}
+      const episodesCache = new Map(); // season_number -> episodes[]
       let longTimeout = null;
       let hardTimeout = null;
 
       if (titleEl) titleEl.textContent = tvTitle;
       if (titleShortEl) titleShortEl.textContent = tvTitle;
 
-      // ===== CINEMAOS URL BUILDER (TV) =====
+      // ===== CINEMAOS URL BUILDER FOR TV =====
       function buildCinemaOsTvSrc(id, season, episode) {
         return (
-          "/scramjet/https://cinemaos.tech/player/" +
+          "/scram/https://cinemaos.tech/player/" +
           encodeURIComponent(id) +
           "/" +
           encodeURIComponent(season) +
@@ -252,7 +289,7 @@
         );
       }
 
-      // ===== BAREMUX TRANSPORT SETUP =====
+      // ===== BAREMUX TRANSPORT =====
       async function setupBareMux() {
         try {
           const connection = new BareMux.BareMuxConnection("/baremux/worker.js");
@@ -275,7 +312,7 @@
         }
       }
 
-      // ===== TIMEOUT HANDLING =====
+      // ===== LOADING TIMEOUTS =====
       function startLoadingTimeouts() {
         if (longTimeout) clearTimeout(longTimeout);
         if (hardTimeout) clearTimeout(hardTimeout);
@@ -304,10 +341,9 @@
         hardTimeout = null;
       }
 
-      // ===== IFRAME LOADER =====
+      // ===== LOAD IFRAME =====
       function loadFrameFor(season, episode) {
         if (!tvId) return;
-
         currentSeason = season;
         currentEpisode = episode;
 
@@ -336,7 +372,7 @@
         }
       }
 
-      // ===== TMDB: LOAD SHOW DETAILS =====
+      // ===== TMDB: SHOW DETAILS =====
       async function loadTvDetails() {
         if (!tvId) {
           if (errorEl) {
@@ -353,27 +389,34 @@
             )}?api_key=${TMDB_KEY}&language=en-US`
           );
           if (!res.ok) throw new Error("TMDB HTTP " + res.status);
-
           const data = await res.json();
 
-          const seasons = (data.seasons || [])
+          seasonsMeta = (data.seasons || [])
             .filter((s) => s.season_number >= 1 && s.episode_count > 0)
             .sort((a, b) => a.season_number - b.season_number);
 
-          seasonsData = seasons;
+          if (!seasonsMeta.length) {
+            if (metaEl) metaEl.textContent = "No seasons with episodes found.";
+            return;
+          }
 
           if (metaEl) {
             const firstAir = data.first_air_date || "";
-            const lastAir = data.last_air_date || "";
-            const numSeasons = seasons.length;
+            const numSeasons = seasonsMeta.length;
             metaEl.textContent =
               `${numSeasons} season${numSeasons !== 1 ? "s" : ""}` +
-              (firstAir ? ` • First aired: ${firstAir}` : "") +
-              (lastAir ? ` • Last aired: ${lastAir}` : "");
+              (firstAir ? ` • First aired: ${firstAir}` : "");
           }
 
-          populateSeasonSelect();
-          updateSeasonInfo();
+          // clamp season
+          const minSeason = seasonsMeta[0].season_number;
+          const maxSeason = seasonsMeta[seasonsMeta.length - 1].season_number;
+          if (currentSeason < minSeason || currentSeason > maxSeason) {
+            currentSeason = minSeason;
+          }
+
+          renderSeasonTabs();
+          await loadSeasonUI(currentSeason, false); // initial, don't auto-change episode
         } catch (err) {
           console.error(err);
           if (metaEl) {
@@ -383,80 +426,118 @@
         }
       }
 
-      function populateSeasonSelect() {
-        if (!seasonSelect || !seasonsData.length) return;
-        seasonSelect.innerHTML = "";
+      // ===== TMDB: EPISODES FOR ONE SEASON =====
+      async function getEpisodesForSeason(seasonNumber) {
+        if (episodesCache.has(seasonNumber)) {
+          return episodesCache.get(seasonNumber);
+        }
+        const res = await fetch(
+          `https://api.themoviedb.org/3/tv/${encodeURIComponent(
+            tvId
+          )}/season/${seasonNumber}?api_key=${TMDB_KEY}&language=en-US`
+        );
+        if (!res.ok) throw new Error("TMDB HTTP " + res.status);
+        const data = await res.json();
+        const episodes = data.episodes || [];
+        episodesCache.set(seasonNumber, episodes);
+        return episodes;
+      }
 
-        seasonsData.forEach((s) => {
-          const opt = document.createElement("option");
-          opt.value = s.season_number;
-          opt.textContent = `Season ${s.season_number}`;
-          if (s.season_number === currentSeason) {
-            opt.selected = true;
-          }
-          seasonSelect.appendChild(opt);
+      // ===== UI: SEASON TABS =====
+      function renderSeasonTabs() {
+        if (!seasonTabsEl || !seasonsMeta.length) return;
+        seasonTabsEl.innerHTML = "";
+
+        seasonsMeta.forEach((s) => {
+          const btn = document.createElement("button");
+          btn.className =
+            "tv-season-tab" +
+            (s.season_number === currentSeason ? " active" : "");
+          btn.textContent = "S" + s.season_number;
+          btn.onclick = () => loadSeasonUI(s.season_number, true);
+          seasonTabsEl.appendChild(btn);
+        });
+      }
+
+      function updateSeasonTabsActive() {
+        if (!seasonTabsEl) return;
+        seasonTabsEl.querySelectorAll(".tv-season-tab").forEach((btn) => {
+          const sNum = parseInt(btn.textContent.replace("S", ""), 10);
+          btn.classList.toggle("active", sNum === currentSeason);
+        });
+      }
+
+      // ===== UI: EPISODE LIST =====
+      function renderEpisodeList(episodes) {
+        if (!episodeListEl) return;
+        episodeListEl.innerHTML = "";
+
+        const total = episodes.length || 0;
+
+        episodes.forEach((ep) => {
+          const epNum = ep.episode_number;
+          const name = ep.name || `Episode ${epNum}`;
+          const item = document.createElement("button");
+          item.className =
+            "tv-episode-item" + (epNum === currentEpisode ? " active" : "");
+          const left = document.createElement("span");
+          left.textContent = `E${epNum}`;
+          const right = document.createElement("span");
+          right.textContent = name;
+          item.appendChild(left);
+          item.appendChild(right);
+
+          item.onclick = () => {
+            currentEpisode = epNum;
+            renderEpisodeList(episodes);
+            updateSeasonInfo(total);
+            loadFrameFor(currentSeason, currentEpisode);
+          };
+
+          episodeListEl.appendChild(item);
         });
 
-        populateEpisodeSelect(currentSeason);
+        updateSeasonInfo(total);
       }
 
-      function populateEpisodeSelect(seasonNumber) {
-        if (!episodeSelect || !seasonsData.length) return;
-        episodeSelect.innerHTML = "";
+      function updateSeasonInfo(totalEpisodes) {
+        if (!seasonInfoEl) return;
+        seasonInfoEl.textContent = `Season ${currentSeason} • ${totalEpisodes} episode${
+          totalEpisodes !== 1 ? "s" : ""
+        } • Now playing S${currentSeason}E${currentEpisode}`;
+      }
 
-        const season = seasonsData.find(
-          (s) => s.season_number === seasonNumber
-        );
-        if (!season) return;
+      // ===== LOAD UI FOR ONE SEASON =====
+      async function loadSeasonUI(seasonNumber, resetEpisode) {
+        currentSeason = seasonNumber;
+        updateSeasonTabsActive();
 
-        const total = season.episode_count || 1;
-
-        for (let i = 1; i <= total; i++) {
-          const opt = document.createElement("option");
-          opt.value = i;
-          opt.textContent = `Episode ${i}`;
-          if (i === currentEpisode) {
-            opt.selected = true;
+        try {
+          const episodes = await getEpisodesForSeason(seasonNumber);
+          if (!episodes.length) {
+            renderEpisodeList([]);
+            return;
           }
-          episodeSelect.appendChild(opt);
-        }
-      }
 
-      function updateSeasonInfo() {
-        if (!seasonInfoEl || !seasonsData.length) return;
-        const season = seasonsData.find(
-          (s) => s.season_number === currentSeason
-        );
-        if (!season) {
-          seasonInfoEl.textContent = "";
-          return;
-        }
-        const total = season.episode_count || 1;
-        seasonInfoEl.textContent = `Season ${currentSeason} • ${total} episode${
-          total !== 1 ? "s" : ""
-        } (currently S${currentSeason}E${currentEpisode})`;
-      }
+          if (resetEpisode) {
+            currentEpisode = 1;
+          }
+          // Clamp episode
+          if (currentEpisode < 1 || currentEpisode > episodes.length) {
+            currentEpisode = 1;
+          }
 
-      // ===== EVENT WIRING =====
-      function wireSelectors() {
-        if (seasonSelect) {
-          seasonSelect.addEventListener("change", () => {
-            const newSeason = parseInt(seasonSelect.value, 10) || 1;
-            currentSeason = newSeason;
-            currentEpisode = 1; // reset to ep1 when season changes
-            populateEpisodeSelect(currentSeason);
-            updateSeasonInfo();
-            loadFrameFor(currentSeason, currentEpisode);
-          });
-        }
-
-        if (episodeSelect) {
-          episodeSelect.addEventListener("change", () => {
-            const newEpisode = parseInt(episodeSelect.value, 10) || 1;
-            currentEpisode = newEpisode;
-            updateSeasonInfo();
-            loadFrameFor(currentSeason, currentEpisode);
-          });
+          renderEpisodeList(episodes);
+          loadFrameFor(currentSeason, currentEpisode);
+        } catch (err) {
+          console.error(err);
+          if (seasonInfoEl) {
+            seasonInfoEl.textContent =
+              "Failed to load episodes for season " +
+              seasonNumber +
+              ": " +
+              err.message;
+          }
         }
       }
 
@@ -471,11 +552,7 @@
         }
 
         await setupBareMux();
-        wireSelectors();
         await loadTvDetails();
-
-        // After TMDB is ready, load the initially requested ep (or S1E1)
-        loadFrameFor(currentSeason, currentEpisode);
       })();
     </script>
   </body>
