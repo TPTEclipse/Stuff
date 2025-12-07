@@ -11,12 +11,17 @@
     <link rel="shortcut icon" content="favicon.ico" />
     <link rel="stylesheet" href="index.css" />
 
-    <!-- Only need SW + global stuff here -->
+    <!-- BareMux + Epoxy + transport boot for Scramjet backend -->
+    <script src="baremux/index.js"></script>
+    <script src="epoxy/index.js"></script>
+    <script src="transport-boot.js" defer></script>
+
+    <!-- Service worker + your global stuff -->
     <script src="register-sw.js" defer></script>
     <script src="global-hub.js" defer></script>
   </head>
 
-  <body>
+  <body class="media-player-page">
     <header class="site-header">
       <div class="site-title">
         S0LACE
@@ -33,139 +38,66 @@
     <main class="player-main">
       <div class="player-info">
         <div class="player-left">
-          NOW PLAYING: <span id="player-title">loading…</span>
+          <span id="player-title">Loading…</span>
         </div>
         <div class="player-actions">
-          <a
-            id="open-direct"
-            href="#"
-            target="_blank"
-            rel="noopener noreferrer"
-            style="display:none"
-          >
-            open raw
-          </a>
-          <button id="reload-btn" type="button" style="display:none">
-            reload
-          </button>
-          <a href="media.html">back to media</a>
+          <a href="media.html">← BACK TO MEDIA</a>
+          <button id="open-new-tab">OPEN IN NEW TAB</button>
         </div>
       </div>
 
-      <div class="player-frame-wrap" id="frame-wrap">
-        <!-- iframe gets injected here -->
+      <div class="player-frame-wrap">
+        <iframe
+          id="media-frame"
+          src="about:blank"
+          allowfullscreen
+          allow="fullscreen; picture-in-picture; encrypted-media"
+        ></iframe>
       </div>
 
-      <div class="no-src" id="no-src" style="display:none;">
-        no media loaded. go back to the media page and pick something.
+      <div id="player-error" class="no-src" style="display:none;">
+        No media URL provided.
       </div>
     </main>
 
     <script>
-      function getParam(name) {
+      (function () {
         const params = new URLSearchParams(window.location.search);
-        return params.get(name);
-      }
+        const src = params.get("src");
+        const title = params.get("title") || "Untitled";
 
-      async function bootPlayer() {
-        const rawSrc = getParam("src");
-        const title = getParam("title") || "Media";
-
+        const frame = document.getElementById("media-frame");
         const titleEl = document.getElementById("player-title");
-        const openDirect = document.getElementById("open-direct");
-        const reloadBtn = document.getElementById("reload-btn");
-        const wrap = document.getElementById("frame-wrap");
-        const noSrc = document.getElementById("no-src");
+        const errorEl = document.getElementById("player-error");
+        const frameWrap = document.querySelector(".player-frame-wrap");
+        const openNewTabBtn = document.getElementById("open-new-tab");
 
-        if (titleEl) titleEl.textContent = title;
-
-        if (!rawSrc) {
-          if (wrap) wrap.style.display = "none";
-          if (noSrc) noSrc.style.display = "flex";
-          if (openDirect) openDirect.style.display = "none";
-          if (reloadBtn) reloadBtn.style.display = "none";
-          return;
+        // Set title from query
+        if (titleEl) {
+          titleEl.textContent = title;
         }
 
-        let src = decodeURIComponent(rawSrc).trim();
-
-        // src is allowed to be:
-        //   - /scramjet/https://...
-        //   - /scram/https://...
-        //   - https://...
-        // We DO NOT touch it for the iframe – we just feed it straight in.
-        if (!src.startsWith("/scramjet/") &&
-            !src.startsWith("/scram/") &&
-            !/^https?:\/\//i.test(src)) {
-          console.error("mediaplayer: invalid src", src);
-          if (wrap) wrap.style.display = "none";
-          if (noSrc) {
-            noSrc.style.display = "flex";
-            noSrc.textContent = "invalid media URL.";
+        if (!src) {
+          // nothing to load
+          if (frameWrap) frameWrap.style.display = "none";
+          if (errorEl) {
+            errorEl.style.display = "flex";
+            errorEl.textContent = "No media URL provided.";
           }
-          if (openDirect) openDirect.style.display = "none";
-          if (reloadBtn) reloadBtn.style.display = "none";
           return;
         }
 
-        // Try to extract a raw URL for the "open raw" button if we can
-        let rawUrl = null;
-        if (src.startsWith("/scramjet/")) {
-          rawUrl = src.slice("/scramjet/".length);
-        } else if (src.startsWith("/scram/")) {
-          rawUrl = src.slice("/scram/".length);
-        } else if (/^https?:\/\//i.test(src)) {
-          rawUrl = src;
+        // Just iframe the src exactly as passed (already /scramjet/… from media.html)
+        if (frame) {
+          frame.src = src;
         }
 
-        if (rawUrl && /^https?:\/\//i.test(rawUrl)) {
-          openDirect.href = rawUrl;
-          openDirect.style.display = "inline-flex";
-        } else {
-          openDirect.style.display = "none";
+        if (openNewTabBtn) {
+          openNewTabBtn.addEventListener("click", () => {
+            window.open(src, "_blank");
+          });
         }
-
-        if (reloadBtn) reloadBtn.style.display = "inline-flex";
-
-        // Make sure SW is registered before the iframe hits /scramjet/...
-        try {
-          if (typeof registerSW === "function") {
-            await registerSW();
-          }
-        } catch (err) {
-          console.warn("SW registration failed in mediaplayer:", err);
-          // still try to load iframe anyway
-        }
-
-        if (!wrap) {
-          console.error("no frame wrapper");
-          return;
-        }
-
-        // clear any old frame
-        wrap.innerHTML = "";
-
-        const iframe = document.createElement("iframe");
-        iframe.id = "media-frame";
-        iframe.src = src;
-        iframe.style.width = "100%";
-        iframe.style.height = "100%";
-        iframe.style.border = "none";
-
-        wrap.appendChild(iframe);
-
-        if (reloadBtn) {
-          reloadBtn.onclick = () => {
-            iframe.src = src;
-          };
-        }
-      }
-
-      window.addEventListener("DOMContentLoaded", () => {
-        bootPlayer().catch((err) =>
-          console.error("mediaplayer boot error:", err)
-        );
-      });
+      })();
     </script>
   </body>
 </html>
