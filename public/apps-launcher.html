@@ -8,233 +8,178 @@
     />
     <title>S0LACE • Player</title>
 
-    <link rel="shortcut icon" content="favicon.webp" />
+    <link rel="shortcut icon" content="favicon.ico" />
     <link rel="stylesheet" href="index.css" />
+
+    <!-- BareMux + Epoxy for Scramjet backend -->
+    <script src="baremux/index.js"></script>
+    <script src="epoxy/index.js"></script>
+
+    <!-- Service worker + global stuff -->
+    <script src="register-sw.js" defer></script>
     <script src="global-hub.js" defer></script>
 
+    <!-- tiny local styles for loading overlay -->
     <style>
-      :root {
-        --bg: #050814;
-        --panel: #020617;
-        --fg: #f9fafb;
-        --fg-dim: #9ca3af;
-        --accent: #3b82f6;
-        --header-h: 56px;
-      }
-
-      * {
-        box-sizing: border-box;
-      }
-
-      html,
-      body {
-        height: 100%;
-      }
-
-      body {
-        margin: 0;
-        min-height: 100vh;
-        background: radial-gradient(circle at top, #0b1220 0, #020617 55%, #000 100%);
-        color: var(--fg);
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-          sans-serif;
-        display: flex;
-        flex-direction: column;
-      }
-
-      .site-header {
-        position: sticky;
-        top: 0;
-        z-index: 50;
-        height: var(--header-h);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 18px;
-        background: rgba(3, 7, 18, 0.9);
-        backdrop-filter: blur(10px);
-        border-bottom: 1px solid rgba(148, 163, 184, 0.1);
-      }
-
-      .site-title {
-        font-size: 15px;
-        font-weight: 600;
-      }
-
-      .site-title span {
-        opacity: 0.6;
-        font-weight: 400;
-        font-size: 12px;
-        margin-left: 4px;
-      }
-
-      .site-nav {
-        display: flex;
-        gap: 10px;
-        font-size: 13px;
-      }
-
-      .site-nav a {
-        text-decoration: none;
-        padding: 6px 10px;
-        border-radius: 999px;
-        border: 1px solid transparent;
-        color: var(--fg-dim);
-        cursor: pointer;
-        transition: 0.15s ease;
-      }
-
-      .site-nav a:hover {
-        border-color: rgba(148, 163, 184, 0.4);
-        color: var(--fg);
-        background: rgba(15, 23, 42, 0.8);
-      }
-
-      main {
-        flex: 1;
-        padding: 12px 10px 12px;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        min-height: 0;
-      }
-
-      .player-info {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 13px;
-        padding: 0 4px;
-        color: var(--fg-dim);
-        gap: 10px;
-      }
-
-      .player-left {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
-      .player-actions a,
-      .player-actions button {
-        font-size: 12px;
-        border-radius: 999px;
-        border: 1px solid rgba(148, 163, 184, 0.4);
-        background: rgba(15, 23, 42, 0.9);
-        color: var(--fg);
-        padding: 4px 10px;
-        cursor: pointer;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-      }
-
-      .player-actions button:hover,
-      .player-actions a:hover {
-        background: rgba(37, 99, 235, 0.3);
-        border-color: rgba(59, 130, 246, 0.9);
-      }
-
-      .player-frame-wrap {
-        flex: 1;
-        min-height: 0;
-        border-radius: 14px;
-        overflow: hidden;
-        border: 1px solid rgba(148, 163, 184, 0.2);
-        background: #020617;
-      }
-
-      #media-frame {
-        width: 100%;
-        height: 100%;
-        border: none;
-        display: block;
-      }
-
-      .no-src {
-        flex: 1;
+      .player-loading {
+        position: absolute;
+        inset: 0;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 14px;
+        flex-direction: column;
+        font-size: 9px;
         color: var(--fg-dim);
+        background: radial-gradient(
+          circle at top,
+          rgba(0, 0, 0, 0.95),
+          rgba(0, 0, 0, 0.98)
+        );
+        z-index: 2;
         text-align: center;
-        padding: 20px;
+        padding: 16px;
+      }
+      .player-loading span {
+        margin-top: 6px;
+        opacity: 0.7;
+      }
+      .player-frame-wrap {
+        position: relative;
       }
     </style>
   </head>
 
-  <body>
+  <body class="media-player-page">
     <header class="site-header">
       <div class="site-title">
-        S0LACE <span>player</span>
+        S0LACE
       </div>
       <nav class="site-nav">
         <a href="index.html">Home</a>
         <a href="games.html">Games</a>
         <a href="media.html" class="active">Media</a>
+        <a href="apps.html">Apps</a>
         <a href="settings.html">Settings</a>
       </nav>
     </header>
 
-    <main>
+    <main class="player-main">
       <div class="player-info">
-        <div class="player-left" id="media-title">Loading…</div>
+        <div class="player-left">
+          <span id="player-title">Loading…</span>
+        </div>
         <div class="player-actions">
-          <button type="button" id="reload-btn">Reload</button>
-          <a href="media.html">Back to Media</a>
+          <a href="media.html">← BACK TO MEDIA</a>
+          <button id="open-new-tab">OPEN IN NEW TAB</button>
         </div>
       </div>
 
-      <div class="player-frame-wrap" id="frame-wrap">
-        <iframe id="media-frame"></iframe>
+      <div class="player-frame-wrap">
+        <!-- loading overlay -->
+        <div id="player-loading" class="player-loading">
+          CONNECTING TO PROXY…
+          <span id="player-loading-sub">
+            If this takes more than a few seconds, the media host or proxy might be slow.
+          </span>
+        </div>
+
+        <iframe
+          id="media-frame"
+          src="about:blank"
+          allowfullscreen
+          allow="fullscreen; picture-in-picture; encrypted-media"
+        ></iframe>
       </div>
 
-      <div class="no-src" id="no-src-msg" style="display: none;">
-        No media URL provided.<br />
-        Go back to the <a href="media.html">media library</a> and pick something.
+      <div id="player-error" class="no-src" style="display:none;">
+        No media URL provided.
       </div>
     </main>
 
     <script>
-      const params = new URLSearchParams(window.location.search);
-      const srcParam = params.get("src"); // original URL (not proxied yet)
-      const titleParam = params.get("title");
+      (async () => {
+        const params = new URLSearchParams(window.location.search);
+        const src = params.get("src");
+        const title = params.get("title") || "Untitled";
 
-      const frame = document.getElementById("media-frame");
-      const wrap = document.getElementById("frame-wrap");
-      const noSrc = document.getElementById("no-src-msg");
-      const titleEl = document.getElementById("media-title");
-      const reloadBtn = document.getElementById("reload-btn");
+        const frame = document.getElementById("media-frame");
+        const titleEl = document.getElementById("player-title");
+        const errorEl = document.getElementById("player-error");
+        const frameWrap = document.querySelector(".player-frame-wrap");
+        const openNewTabBtn = document.getElementById("open-new-tab");
+        const loadingEl = document.getElementById("player-loading");
+        const loadingSub = document.getElementById("player-loading-sub");
 
-      let originalSrc = null;
+        if (titleEl) titleEl.textContent = title;
 
-      function buildProxiedUrl(original) {
-        // CHANGE THIS if your Scramjet route is different
-        // e.g. "/scramjet/" or "/proxy/"
-        return "/scram/" + original;
-      }
+        if (!src) {
+          if (frameWrap) frameWrap.style.display = "none";
+          if (errorEl) {
+            errorEl.style.display = "flex";
+            errorEl.textContent = "No media URL provided.";
+          }
+          return;
+        }
 
-      if (srcParam) {
-        originalSrc = decodeURIComponent(srcParam);
-        const displayTitle = titleParam ? decodeURIComponent(titleParam) : originalSrc;
-        titleEl.textContent = displayTitle;
+        // Make "open in new tab" always available
+        if (openNewTabBtn) {
+          openNewTabBtn.addEventListener("click", () => {
+            window.open(src, "_blank");
+          });
+        }
 
-        const proxied = buildProxiedUrl(originalSrc);
-        frame.src = proxied;
-      } else {
-        wrap.style.display = "none";
-        noSrc.style.display = "flex";
-        titleEl.textContent = "No media loaded";
-        reloadBtn.disabled = true;
-      }
+        // 1) ENSURE BAREMUX TRANSPORT BEFORE HITTING /scramjet/…
+        try {
+          const connection = new BareMux.BareMuxConnection("/baremux/worker.js");
+          const wispUrl =
+            (location.protocol === "https:" ? "wss" : "ws") +
+            "://" +
+            location.host +
+            "/wisp/";
 
-      reloadBtn.addEventListener("click", () => {
-        if (!originalSrc) return;
-        const proxied = buildProxiedUrl(originalSrc);
-        frame.src = proxied;
-      });
+          if ((await connection.getTransport()) !== "/epoxy/index.mjs") {
+            await connection.setTransport("/epoxy/index.mjs", [{ wisp: wispUrl }]);
+          }
+          console.log("BareMux transport ready in mediaplayer tab");
+        } catch (err) {
+          console.error("Failed to init BareMux transport (mediaplayer)", err);
+          if (loadingSub) {
+            loadingSub.textContent =
+              "Proxy transport failed to init. The page may still load, but some hosts will break.";
+          }
+        }
+
+        // 2) LOADING TIMEOUT HINTS
+        let longTimeout = setTimeout(() => {
+          if (loadingSub) {
+            loadingSub.textContent =
+              "This is taking longer than usual. The media host or proxy might be slow or timing out.";
+          }
+        }, 8000);
+
+        let hardTimeout = setTimeout(() => {
+          if (loadingEl) {
+            loadingEl.style.display = "none";
+          }
+          if (errorEl) {
+            errorEl.style.display = "flex";
+            errorEl.textContent =
+              "The media did not finish loading. It may be blocked, down, or the proxy hit a timeout.";
+          }
+        }, 25000); // 25s hard fail
+
+        // 3) SET IFRAME SRC + HANDLE LOAD
+        if (frame) {
+          frame.addEventListener("load", () => {
+            // If we got any kind of load event, kill the loading overlay.
+            if (loadingEl) loadingEl.style.display = "none";
+            clearTimeout(longTimeout);
+            clearTimeout(hardTimeout);
+          });
+
+          frame.src = src; // already /scramjet/https://... from media.html
+        }
+      })();
     </script>
   </body>
 </html>
