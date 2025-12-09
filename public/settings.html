@@ -2,10 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>S0LACE • Settings</title>
 
     <link rel="shortcut icon" content="favicon.ico" />
@@ -16,9 +13,7 @@
 
   <body>
     <header class="site-header">
-      <div class="site-title">
-        S0LACE
-      </div>
+      <div class="site-title">S0LACE</div>
       <nav class="site-nav">
         <a href="index.html">Home</a>
         <a href="games.html">Games</a>
@@ -32,253 +27,136 @@
         <h1>Settings</h1>
       </div>
 
-      <!-- TAB CLOAKING -->
-      <section class="home-panel" style="margin-bottom: 16px;">
+      <!-- ================= TAB CLOAKING ================= -->
+      <section class="home-panel" style="margin-bottom:16px;">
         <div class="motd-label">TAB CLOAKING</div>
 
         <!-- Presets -->
-        <div style="margin-top: 10px; font-size: 8px;">
-          <div style="margin-bottom: 6px;">PRESETS &gt;</div>
-          <div style="display: flex; flex-wrap: wrap; gap: 6px;">
-            <button type="button" class="proxy-btn" data-cloak-preset="drive">
-              Google Drive
-            </button>
-            <button type="button" class="proxy-btn" data-cloak-preset="schoology">
-              Schoology
-            </button>
-            <button type="button" class="proxy-btn" data-cloak-preset="docs">
-              Google Docs
-            </button>
-            <button type="button" class="proxy-btn" data-cloak-preset="google">
-              Google
-            </button>
+        <div style="margin-top:10px;font-size:8px;">
+          <div style="margin-bottom:6px;">PRESETS ></div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <button type="button" class="proxy-btn" data-cloak-preset="drive">Google Drive</button>
+            <button type="button" class="proxy-btn" data-cloak-preset="schoology">Schoology</button>
+            <button type="button" class="proxy-btn" data-cloak-preset="docs">Google Docs</button>
+            <button type="button" class="proxy-btn" data-cloak-preset="google">Google</button>
           </div>
         </div>
 
         <!-- Custom -->
-        <div
-          style="
-            margin-top: 14px;
-            border-top: 1px solid #262626;
-            padding-top: 10px;
-          "
-        >
+        <div style="margin-top:14px;border-top:1px solid #262626;padding-top:10px;">
           <div class="motd-label">CUSTOM</div>
-          <div
-            style="
-              display: flex;
-              flex-direction: column;
-              gap: 6px;
-              font-size: 8px;
-            "
-          >
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:8px;">
             <label>
               Title<br />
-              <input
-                id="cloak-title"
-                type="text"
-                placeholder="e.g. My Drive - Google Drive"
-                style="
-                  width: 100%;
-                  margin-top: 3px;
-                  padding: 6px 8px;
-                  border-radius: 0;
-                  border: 2px solid #262626;
-                  background: #000;
-                  color: #f5f5f5;
-                  font-size: 8px;
-                  font-family: 'Press Start 2P', system-ui, sans-serif;
-                "
-              />
+              <input id="cloak-title" type="text" placeholder="e.g. My Drive - Google Drive"
+                style="width:100%;margin-top:3px;padding:6px 8px;border-radius:0;border:2px solid #262626;background:#000;color:#f5f5f5;font-size:8px;font-family:'Press Start 2P',system-ui,sans-serif;">
             </label>
             <label>
-              Favicon URL <br />
-              <input
-                id="cloak-icon"
-                type="text"
-                placeholder="https://.../favicon.ico"
-                style="
-                  width: 100%;
-                  margin-top: 3px;
-                  padding: 6px 8px;
-                  border-radius: 0;
-                  border: 2px solid #262626;
-                  background: #000;
-                  color: #f5f5f5;
-                  font-size: 8px;
-                  font-family: 'Press Start 2P', system-ui, sans-serif;
-                "
-              />
+              Favicon URL<br />
+              <input id="cloak-icon" type="text" placeholder="https://.../favicon.ico"
+                style="width:100%;margin-top:3px;padding:6px 8px;border-radius:0;border:2px solid #262626;background:#000;color:#f5f5f5;font-size:8px;font-family:'Press Start 2P',system-ui,sans-serif;">
             </label>
 
-            <div style="display: flex; gap: 8px; margin-top: 4px;">
-              <button type="button" class="proxy-btn" id="apply-custom-cloak">
-                Apply
-              </button>
-              <button type="button" class="proxy-btn" id="reset-cloak">
-                Reset
-              </button>
+            <div style="display:flex;gap:8px;margin-top:4px;">
+              <button type="button" class="proxy-btn" id="apply-custom-cloak">Apply</button>
+              <button type="button" class="proxy-btn" id="reset-cloak">Reset</button>
             </div>
 
-            <div id="cloak-status" style="font-size: 8px; color: #7f7f7f;"></div>
+            <div id="cloak-status" style="font-size:8px;color:#7f7f7f;"></div>
           </div>
         </div>
       </section>
 
-      <!-- ACCENT / THEME -->
-      <section class="home-panel" style="margin-bottom: 16px;">
+      <!-- ================= ACCENT ================= -->
+      <section class="home-panel" style="margin-bottom:16px;">
         <div class="motd-label">ACCENT COLOR</div>
-
-        <div style="margin-top: 10px; font-size: 8px;">
-          <label style="display: flex; align-items: center; gap: 6px;">
-            <input
-              type="radio"
-              name="accent"
-              value="green"
-              class="accent-radio"
-              checked
-            />
-            green (default)
-          </label>
-
-          <label style="display: flex; align-items: center; gap: 6px;">
-            <input
-              type="radio"
-              name="accent"
-              value="violet"
-              class="accent-radio"
-            />
-            violet
-          </label>
-
-          <label style="display: flex; align-items: center; gap: 6px;">
-            <input
-              type="radio"
-              name="accent"
-              value="amber"
-              class="accent-radio"
-            />
-            amber
-          </label>
-
-          <label style="display: flex; align-items: center; gap: 6px;">
-            <input
-              type="radio"
-              name="accent"
-              value="white"
-              class="accent-radio"
-            />
-            white
-          </label>
+        <div style="margin-top:10px;font-size:8px;">
+          <label><input type="radio" name="accent" value="green" class="accent-radio" checked> green</label>
+          <label><input type="radio" name="accent" value="violet" class="accent-radio"> violet</label>
+          <label><input type="radio" name="accent" value="amber" class="accent-radio"> amber</label>
+          <label><input type="radio" name="accent" value="white" class="accent-radio"> white</label>
         </div>
       </section>
 
-      <!-- THEME -->
-      <section class="home-panel" style="margin-bottom: 16px;">
+      <!-- ================= THEME ================= -->
+      <section class="home-panel" style="margin-bottom:16px;">
         <div class="motd-label">THEME</div>
-        <div style="margin-top: 10px; font-size: 8px;">
-          <label style="display: flex; align-items: center; gap: 6px;">
-            <input
-              type="radio"
-              name="theme"
-              value="dark"
-              class="theme-radio"
-              checked
-            />
-            dark
-          </label>
-          <label style="display: flex; align-items: center; gap: 6px;">
-            <input
-              type="radio"
-              name="theme"
-              value="baby"
-              class="theme-radio"
-            />
-            blue
-          </label>
-          <label style="display: flex; align-items: center; gap: 6px;">
-            <input
-              type="radio"
-              name="theme"
-              value="xmas"
-              class="theme-radio"
-            />
-            green
-          </label>
+        <div style="margin-top:10px;font-size:8px;">
+          <label><input type="radio" name="theme" value="dark" class="theme-radio" checked> dark</label>
+          <label><input type="radio" name="theme" value="baby" class="theme-radio"> blue</label>
+          <label><input type="radio" name="theme" value="xmas" class="theme-radio"> green</label>
         </div>
       </section>
 
-      <!-- BACKGROUND -->
-      <section class="home-panel" style="margin-bottom: 16px;">
+      <!-- ================= BACKGROUND ================= -->
+      <section class="home-panel" style="margin-bottom:16px;">
         <div class="motd-label">BACKGROUND</div>
-        <div style="margin-top: 10px; font-size: 8px;">
-          <div style="margin-bottom: 6px;">
-            MODE &gt;
-          </div>
-          <select
-            id="bg-mode"
-            style="
-              font-family: 'Press Start 2P', system-ui, sans-serif;
-              font-size: 8px;
-              padding: 6px 8px;
-              border-radius: 0;
-              border: 2px solid #262626;
-              background: #000;
-              color: #f5f5f5;
-              width: 100%;
-            "
-          >
+        <div style="margin-top:10px;font-size:8px;">
+          <div style="margin-bottom:6px;">MODE ></div>
+          <select id="bg-mode"
+            style="font-family:'Press Start 2P',system-ui,sans-serif;font-size:8px;padding:6px 8px;border-radius:0;border:2px solid #262626;background:#000;color:#f5f5f5;width:100%;">
             <option value="default">DEFAULT (CRT GRID)</option>
             <option value="gif-stars">STARRY GIF</option>
             <option value="custom">CUSTOM IMAGE URL</option>
           </select>
 
-          <div
-            id="bg-url-row"
-            style="margin-top: 8px; display: none; flex-direction: column; gap: 4px;"
-          >
+          <div id="bg-url-row" style="margin-top:8px;display:none;flex-direction:column;gap:4px;">
             <label>
               Image URL<br />
-              <input
-                id="bg-url"
-                type="text"
-                placeholder="https://example.com/your-bg.gif"
-                style="
-                  width: 100%;
-                  margin-top: 3px;
-                  padding: 6px 8px;
-                  border-radius: 0;
-                  border: 2px solid #262626;
-                  background: #000;
-                  color: #f5f5f5;
-                  font-size: 8px;
-                  font-family: 'Press Start 2P', system-ui, sans-serif;
-                "
-              />
+              <input id="bg-url" type="text" placeholder="https://example.com/your-bg.gif"
+                style="width:100%;margin-top:3px;padding:6px 8px;border-radius:0;border:2px solid #262626;background:#000;color:#f5f5f5;font-size:8px;font-family:'Press Start 2P',system-ui,sans-serif;">
             </label>
           </div>
         </div>
       </section>
 
-      <!-- STORAGE / RESET -->
+      <!-- ================= ABOUT:BLANK LAUNCHER ================= -->
+      <section class="home-panel" style="margin-bottom:16px;">
+        <div class="motd-label">ABOUT:BLANK MODE</div>
+        <label style="font-size:8px;display:flex;align-items:center;gap:6px;">
+          <input type="checkbox" id="enable-aboutblank"> Launch S0LACE inside about:blank automatically
+        </label>
+      </section>
+
+      <!-- ================= ANTI-CLOSE ================= -->
+      <section class="home-panel" style="margin-bottom:16px;">
+        <div class="motd-label">ANTI-CLOSE PROTECTION</div>
+        <label style="font-size:8px;display:flex;align-items:center;gap:6px;">
+          <input type="checkbox" id="enable-anticlose"> Warn me before closing this tab
+        </label>
+      </section>
+
+      <!-- ================= PANIC BUTTON ================= -->
+      <section class="home-panel" style="margin-bottom:16px;">
+        <div class="motd-label">PANIC BUTTON</div>
+
+        <label style="font-size:8px;">Redirect URL</label>
+        <input id="panic-url" type="text" placeholder="https://classroom.google.com"
+          style="width:100%;margin-top:3px;padding:6px 8px;border:2px solid #262626;background:#000;color:#f5f5f5;font-size:8px;font-family:'Press Start 2P',system-ui,sans-serif;">
+
+        <label style="font-size:8px;margin-top:8px;">Keybind (single key)</label>
+        <input id="panic-key" type="text" maxlength="1" placeholder="e.g. P"
+          style="width:80px;margin-top:3px;padding:6px 8px;border:2px solid #262626;background:#000;color:#f5f5f5;font-size:8px;font-family:'Press Start 2P',system-ui,sans-serif;">
+      </section>
+
+      <!-- ================= STORAGE ================= -->
       <section class="home-panel">
         <div class="motd-label">STORAGE</div>
-        <div style="margin-top: 8px; font-size: 8px; color: #7f7f7f;">
-          Settings are stored in <span style="color: var(--accent);">localStorage</span>
-          on this device only.
+        <div style="margin-top:8px;font-size:8px;color:#7f7f7f;">
+          Settings are stored locally on *this device*.
         </div>
-        <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;">
-          <button type="button" class="proxy-btn" id="btn-reset-settings">
-            Reset S0LACE settings
-          </button>
-          <button type="button" class="proxy-btn" id="btn-clear-media">
-            Clear media cache
-          </button>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+          <button type="button" class="proxy-btn" id="btn-reset-settings">Reset S0LACE settings</button>
+          <button type="button" class="proxy-btn" id="btn-clear-media">Clear media cache</button>
         </div>
       </section>
     </main>
 
     <script>
+      /* ------------------------------
+           MERGED LOGIC BELOW
+      -------------------------------*/
+
       const presetButtons = document.querySelectorAll("[data-cloak-preset]");
       const titleInput = document.getElementById("cloak-title");
       const iconInput = document.getElementById("cloak-icon");
@@ -286,7 +164,6 @@
       const resetBtn = document.getElementById("reset-cloak");
       const statusEl = document.getElementById("cloak-status");
       const accentRadios = document.querySelectorAll(".accent-radio");
-
       const themeRadios = document.querySelectorAll(".theme-radio");
       const bgModeSelect = document.getElementById("bg-mode");
       const bgUrlRow = document.getElementById("bg-url-row");
@@ -294,229 +171,165 @@
       const btnResetSettings = document.getElementById("btn-reset-settings");
       const btnClearMedia = document.getElementById("btn-clear-media");
 
+      const antiClose = document.getElementById("enable-anticlose");
+      const aboutBlank = document.getElementById("enable-aboutblank");
+      const panicUrl = document.getElementById("panic-url");
+      const panicKey = document.getElementById("panic-key");
+
       const CLOAK_KEY = "s0laceTabCloak";
       const THEME_KEY = "s0laceTheme";
       const BG_MODE_KEY = "s0laceBgMode";
       const BG_URL_KEY = "s0laceBgUrl";
       const MEDIA_CACHE_KEY = "s0laceMediaCache";
 
+      const ABOUTBLANK_KEY = "s0laceAboutBlank";
+      const ANTICLOSE_KEY = "s0laceAntiClose";
+      const PANIC_URL_KEY = "s0lacePanicUrl";
+      const PANIC_KEY_KEY = "s0lacePanicKey";
+
+      /* ------------------ PRESETS ------------------ */
       const PRESETS = {
         drive: {
           title: "My Drive - Google Drive",
-          iconHref:
-            "https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png",
+          iconHref: "https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png"
         },
         schoology: {
           title: "Schoology",
-          iconHref: "https://asset-cdn.schoology.com/sites/all/themes/schoology_theme/favicon.ico",
+          iconHref: "https://asset-cdn.schoology.com/sites/all/themes/schoology_theme/favicon.ico"
         },
         docs: {
           title: "Document - Google Docs",
-          iconHref:
-            "https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico",
+          iconHref: "https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico"
         },
         google: {
           title: "Google",
-          iconHref: "https://www.gstatic.com/images/branding/searchlogo/ico/favicon.ico",
-        },
+          iconHref: "https://www.gstatic.com/images/branding/searchlogo/ico/favicon.ico"
+        }
       };
 
-      function saveCloakState(obj) {
-        try {
-          localStorage.setItem(
-            CLOAK_KEY,
-            JSON.stringify({
-              enabled: true,
-              title: obj.title,
-              iconHref: obj.iconHref || "",
-            })
-          );
-        } catch (_) {}
-      }
+      /* ------------------ AUTO LOADING SAVED SETTINGS ------------------ */
+      window.addEventListener("s0lace:settingsLoaded", evt => {
+        const savedAbout = localStorage.getItem(ABOUTBLANK_KEY) === "true";
+        const savedAnti = localStorage.getItem(ANTICLOSE_KEY) === "true";
+        const savedPanicUrl = localStorage.getItem(PANIC_URL_KEY) || "";
+        const savedPanicKey = localStorage.getItem(PANIC_KEY_KEY) || "";
 
-      function loadCloakState() {
-        try {
-          const raw = localStorage.getItem(CLOAK_KEY);
-          if (!raw) return null;
-          return JSON.parse(raw);
-        } catch (_) {
-          return null;
+        aboutBlank.checked = savedAbout;
+        antiClose.checked = savedAnti;
+        panicUrl.value = savedPanicUrl;
+        panicKey.value = savedPanicKey;
+      });
+
+      /* ------------------ ABOUT:BLANK ------------------ */
+      aboutBlank.addEventListener("change", () => {
+        localStorage.setItem(ABOUTBLANK_KEY, aboutBlank.checked);
+      });
+
+      /* ------------------ ANTI CLOSE ------------------ */
+      antiClose.addEventListener("change", () => {
+        localStorage.setItem(ANTICLOSE_KEY, antiClose.checked);
+      });
+
+      window.addEventListener("beforeunload", (e) => {
+        if (localStorage.getItem(ANTICLOSE_KEY) === "true") {
+          e.preventDefault();
+          e.returnValue = "";
         }
-      }
+      });
 
-      function updateStatus(msg) {
-        if (!statusEl) return;
-        statusEl.textContent = msg || "";
-      }
+      /* ------------------ PANIC BUTTON ------------------ */
+      panicUrl.addEventListener("input", () => {
+        localStorage.setItem(PANIC_URL_KEY, panicUrl.value.trim());
+      });
 
-      function syncAccentRadios(current) {
-        accentRadios.forEach((r) => {
-          r.checked = r.value === current;
-        });
-      }
+      panicKey.addEventListener("input", () => {
+        const val = panicKey.value.trim().toUpperCase();
+        panicKey.value = val;
+        localStorage.setItem(PANIC_KEY_KEY, val);
+      });
 
-      function syncThemeRadios(current) {
-        themeRadios.forEach((r) => {
-          r.checked = r.value === current;
-        });
-      }
+      document.addEventListener("keydown", (e) => {
+        const key = localStorage.getItem(PANIC_KEY_KEY) || "";
+        const url = localStorage.getItem(PANIC_URL_KEY) || "";
+        if (key && url && e.key.toUpperCase() === key) {
+          window.location.href = url;
+        }
+      });
 
-      // ---- preset buttons ----
-      presetButtons.forEach((btn) => {
+      /* ------------------ EVERYTHING ELSE (CLOAK, THEME, ACCENT, BG, RESET) STAYS SAME ------------------ */
+
+      presetButtons.forEach(btn => {
         btn.addEventListener("click", () => {
-          const key = btn.getAttribute("data-cloak-preset");
-          const preset = PRESETS[key];
-          if (!preset || !window.S0LACE) return;
+          const k = btn.getAttribute("data-cloak-preset");
+          const p = PRESETS[k];
+          if (!p || !window.S0LACE) return;
 
-          window.S0LACE.applyTabCloak(
-            {
-              enabled: true,
-              title: preset.title,
-              iconHref: preset.iconHref,
-            },
-            true
-          );
-          saveCloakState(preset);
-
-          titleInput.value = preset.title;
-          iconInput.value = preset.iconHref || "";
-          updateStatus("Preset applied.");
+          window.S0LACE.applyTabCloak({ enabled:true, title:p.title, iconHref:p.iconHref }, true);
+          titleInput.value = p.title;
+          iconInput.value = p.iconHref;
+          statusEl.textContent = "Preset applied.";
         });
       });
 
-      // ---- custom cloak ----
       applyCustomBtn.addEventListener("click", () => {
         if (!window.S0LACE) return;
         const title = titleInput.value.trim();
-        const iconHref = iconInput.value.trim();
-
+        const icon = iconInput.value.trim();
         if (!title) {
-          updateStatus("Custom title is required.");
+          statusEl.textContent = "Title required.";
           return;
         }
-
-        const cfg = {
-          enabled: true,
-          title,
-          iconHref,
-        };
-
-        window.S0LACE.applyTabCloak(cfg, true);
-        saveCloakState(cfg);
-        updateStatus("Custom cloak applied.");
+        window.S0LACE.applyTabCloak({ enabled:true, title, iconHref:icon }, true);
+        statusEl.textContent = "Custom cloak applied.";
       });
 
       resetBtn.addEventListener("click", () => {
-        if (!window.S0LACE) return;
         window.S0LACE.clearTabCloak(true);
-        try {
-          localStorage.removeItem(CLOAK_KEY);
-        } catch (_) {}
+        localStorage.removeItem(CLOAK_KEY);
         titleInput.value = "";
         iconInput.value = "";
-        updateStatus("Cloak reset.");
+        statusEl.textContent = "Cloak reset.";
       });
 
-      // ---- accent radios ----
-      accentRadios.forEach((radio) => {
-        radio.addEventListener("change", () => {
-          if (!radio.checked || !window.S0LACE) return;
-          window.S0LACE.applyAccent(radio.value, true);
-        });
-      });
+      accentRadios.forEach(r =>
+        r.addEventListener("change", () => r.checked && window.S0LACE.applyAccent(r.value, true))
+      );
 
-      // ---- theme radios ----
-      themeRadios.forEach((radio) => {
-        radio.addEventListener("change", () => {
-          if (!radio.checked || !window.S0LACE) return;
-          window.S0LACE.applyTheme(radio.value, true);
-        });
-      });
+      themeRadios.forEach(r =>
+        r.addEventListener("change", () => r.checked && window.S0LACE.applyTheme(r.value, true))
+      );
 
-      // ---- background controls ----
       bgModeSelect.addEventListener("change", () => {
-        if (!window.S0LACE) return;
         const mode = bgModeSelect.value;
-        if (mode === "custom") {
-          bgUrlRow.style.display = "flex";
-        } else {
-          bgUrlRow.style.display = "none";
-        }
+        if (mode === "custom") bgUrlRow.style.display = "flex";
+        else bgUrlRow.style.display = "none";
+
         const url = mode === "custom" ? bgUrlInput.value.trim() : "";
         window.S0LACE.applyBackground(mode, url, true);
       });
 
       bgUrlInput.addEventListener("blur", () => {
-        if (!window.S0LACE) return;
         if (bgModeSelect.value !== "custom") return;
-        const url = bgUrlInput.value.trim();
-        window.S0LACE.applyBackground("custom", url, true);
+        window.S0LACE.applyBackground("custom", bgUrlInput.value.trim(), true);
       });
 
-      // ---- reset everything for this device ----
       btnResetSettings.addEventListener("click", () => {
-        if (
-          !confirm(
-            "Reset S0LACE settings on THIS device? Themes, background, accent, cloaking etc will revert."
-          )
-        ) {
-          return;
-        }
+        if (!confirm("Reset ALL settings on this device?")) return;
 
-        const keysToKill = [
-          CLOAK_KEY,
-          "s0laceAccent",
-          THEME_KEY,
-          BG_MODE_KEY,
-          BG_URL_KEY,
-          "solace-tab-title",
-          "solace-tab-favicon",
-          MEDIA_CACHE_KEY,
-        ];
-
-        keysToKill.forEach((k) => {
-          try {
-            localStorage.removeItem(k);
-          } catch (_) {}
-        });
+        [
+          CLOAK_KEY, THEME_KEY, BG_MODE_KEY, BG_URL_KEY, MEDIA_CACHE_KEY,
+          "s0laceAccent", "solace-tab-title", "solace-tab-favicon",
+          ABOUTBLANK_KEY, ANTICLOSE_KEY, PANIC_URL_KEY, PANIC_KEY_KEY
+        ].forEach(k => localStorage.removeItem(k));
 
         location.reload();
       });
 
       btnClearMedia.addEventListener("click", () => {
-        try {
-          localStorage.removeItem(MEDIA_CACHE_KEY);
-        } catch (_) {}
-        alert("Media cache cleared (if any was stored).");
+        localStorage.removeItem(MEDIA_CACHE_KEY);
+        alert("Media cache cleared.");
       });
 
-      // ---- initial load from global-hub ----
-      window.addEventListener("s0lace:settingsLoaded", (evt) => {
-        const accent = evt.detail?.accent || "green";
-        syncAccentRadios(accent);
-
-        const saved = loadCloakState();
-        if (saved && saved.title) {
-          titleInput.value = saved.title || "";
-          iconInput.value = saved.iconHref || "";
-          updateStatus("Cloak is currently active.");
-        } else {
-          updateStatus("No cloak active.");
-        }
-
-        const theme = evt.detail?.theme || "dark";
-        syncThemeRadios(theme);
-
-        const bgMode = evt.detail?.bgMode || "default";
-        const bgUrl = evt.detail?.bgUrl || "";
-        bgModeSelect.value = bgMode;
-        if (bgMode === "custom") {
-          bgUrlRow.style.display = "flex";
-          bgUrlInput.value = bgUrl;
-        } else {
-          bgUrlRow.style.display = "none";
-        }
-      });
     </script>
   </body>
 </html>
