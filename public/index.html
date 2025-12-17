@@ -44,92 +44,72 @@
       z-index: 1;
     }
 
-    /* ===== LAYOUT ===== */
-    .home-shell {
-      display: grid;
-      gap: 28px;
+    /* ===== CENTER LAYOUT ===== */
+    .home-wrap {
       width: 100%;
       max-width: 720px;
       padding: 32px;
-    }
-
-    .hero-block {
       text-align: center;
-      padding: 28px;
-      border: 2px solid var(--border-hard);
-      background: var(--panel);
     }
 
-    .hero-title {
-      font-family: "Press Start 2P";
-      font-size: 52px;
+    .home-title {
+      font-size: 64px;
+      font-weight: 800;
+      letter-spacing: 1px;
       color: var(--fg);
     }
 
-    .hero-version {
-      font-family: "Press Start 2P";
-      font-size: 10px;
-      margin-top: 8px;
+    .home-version {
+      margin-top: 6px;
+      font-size: 12px;
       color: var(--fg-dim);
+      font-family: "Press Start 2P";
     }
 
-    /* ===== PROXY ===== */
-    .proxy-block {
-      padding: 22px;
-      border: 2px solid var(--border-hard);
-      background: var(--panel);
+    /* ===== SEARCH ===== */
+    .proxy-wrap {
+      margin-top: 42px;
     }
 
     #sj-form {
       display: flex;
       gap: 10px;
-      margin-top: 14px;
     }
 
     #sj-address {
       flex: 1;
-      padding: 16px;
+      padding: 18px 20px;
       font-size: 16px;
+      border-radius: 10px;
     }
 
     .proxy-btn {
-      padding: 16px 24px;
+      padding: 18px 26px;
       font-size: 14px;
+      border-radius: 10px;
       cursor: pointer;
     }
 
-    /* ===== VISITORS ===== */
-    .stats-block {
-      padding: 18px;
-      border: 2px solid var(--border-hard);
-      background: var(--panel);
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      text-align: center;
+    /* ===== VISITOR META ===== */
+    .visitor-meta {
+      margin-top: 36px;
+      display: flex;
+      justify-content: center;
+      gap: 28px;
       font-family: "Press Start 2P";
-    }
-
-    .stat-label {
-      font-size: 8px;
+      font-size: 10px;
       color: var(--fg-dim);
     }
 
-    .stat-value {
-      font-size: 16px;
+    .visitor-meta span {
       color: var(--accent);
-      margin-top: 6px;
-      text-shadow: 0 0 6px var(--accent);
     }
   </style>
 </head>
 
 <body>
 
-<!-- SIDE ICON NAV (unchanged logic) -->
+<!-- SIDE ICON NAV -->
 <nav class="side-header">
   <a href="index.html" class="side-icon" data-icon="home"><img /></a>
   <a href="games.html" class="side-icon" data-icon="games"><img /></a>
@@ -138,49 +118,34 @@
 </nav>
 
 <main>
-  <div class="home-shell">
+  <div class="home-wrap">
 
-    <!-- HERO -->
-    <section class="hero-block">
-      <div class="hero-title">S0LACE</div>
-      <div class="hero-version">v1.1.0</div>
-    </section>
+    <!-- TITLE -->
+    <div class="home-title">S0LACE</div>
+    <div class="home-version">v1.1.0</div>
 
-    <!-- PROXY -->
-    <section class="proxy-block">
-      <div class="proxy-label">PR0XY &gt;</div>
-
+    <!-- SEARCH -->
+    <div class="proxy-wrap">
       <form id="sj-form">
         <input id="sj-search-engine"
                value="https://www.google.com/search?q=%s"
                type="hidden" />
         <input id="sj-address"
                type="text"
-               placeholder="enter url or search…" />
+               placeholder="search or enter a url…" />
         <button class="proxy-btn" type="submit">GO</button>
       </form>
 
       <div id="sj-error"></div>
       <pre id="sj-error-code"></pre>
-    </section>
+    </div>
 
     <!-- VISITORS -->
-    <section class="stats-block">
-      <div class="stats-grid">
-        <div>
-          <div class="stat-label">TODAY</div>
-          <div id="vis-today" class="stat-value">—</div>
-        </div>
-        <div>
-          <div class="stat-label">THIS WEEK</div>
-          <div id="vis-week" class="stat-value">—</div>
-        </div>
-        <div>
-          <div class="stat-label">ALL TIME</div>
-          <div id="vis-all" class="stat-value">—</div>
-        </div>
-      </div>
-    </section>
+    <div class="visitor-meta">
+      <div>TODAY <span id="vis-today">—</span></div>
+      <div>WEEK <span id="vis-week">—</span></div>
+      <div>ALL <span id="vis-all">—</span></div>
+    </div>
 
   </div>
 </main>
@@ -214,7 +179,7 @@ updateSideIcons();
 window.addEventListener("storage", updateSideIcons);
 </script>
 
-<!-- ✅ FIXED FIREBASE VISITOR COUNTER -->
+<!-- FIXED FIREBASE VISITOR COUNTER -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
@@ -230,45 +195,40 @@ const db = getDatabase(app);
 
 const todayKey = () => new Date().toISOString().split("T")[0];
 const weekKey = () => {
-  const d = new Date();
-  const j = new Date(d.getFullYear(), 0, 1);
+  const d = new Date(), j = new Date(d.getFullYear(), 0, 1);
   return "week_" + Math.ceil((((d - j) / 86400000) + j.getDay() + 1) / 7);
 };
 
-async function safeUpdate(increment) {
+async function update(increment) {
   try {
-    const allRef = ref(db, "visitors/all");
-    const todayRef = ref(db, "visitors/today/" + todayKey());
-    const weekRef = ref(db, "visitors/week/" + weekKey());
+    const allRef = ref(db,"visitors/all");
+    const todayRef = ref(db,"visitors/today/"+todayKey());
+    const weekRef = ref(db,"visitors/week/"+weekKey());
 
-    const [all, today, week] = await Promise.all([
-      get(allRef).then(s => s.val() || 0),
-      get(todayRef).then(s => s.val() || 0),
-      get(weekRef).then(s => s.val() || 0)
+    const [a,t,w] = await Promise.all([
+      get(allRef).then(s=>s.val()||0),
+      get(todayRef).then(s=>s.val()||0),
+      get(weekRef).then(s=>s.val()||0)
     ]);
 
-    if (increment) {
+    if(increment){
       await Promise.all([
-        set(allRef, all + 1),
-        set(todayRef, today + 1),
-        set(weekRef, week + 1)
+        set(allRef,a+1),
+        set(todayRef,t+1),
+        set(weekRef,w+1)
       ]);
     }
 
-    document.getElementById("vis-all").textContent = all + (increment ? 1 : 0);
-    document.getElementById("vis-today").textContent = today + (increment ? 1 : 0);
-    document.getElementById("vis-week").textContent = week + (increment ? 1 : 0);
-  } catch (e) {
-    console.warn("Visitor counter failed:", e);
-  }
+    vis-all.textContent = a + (increment?1:0);
+    vis-today.textContent = t + (increment?1:0);
+    vis-week.textContent = w + (increment?1:0);
+  } catch(e){}
 }
 
-if (!sessionStorage.getItem("s0lace-counted")) {
-  sessionStorage.setItem("s0lace-counted", "1");
-  safeUpdate(true);
-} else {
-  safeUpdate(false);
-}
+if(!sessionStorage.getItem("s0lace-counted")){
+  sessionStorage.setItem("s0lace-counted","1");
+  update(true);
+}else update(false);
 </script>
 
 </body>
