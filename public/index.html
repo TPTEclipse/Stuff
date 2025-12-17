@@ -44,7 +44,7 @@
       z-index: 1;
     }
 
-    /* ===== CENTER LAYOUT ===== */
+    /* ===== CENTER ===== */
     .home-wrap {
       width: 100%;
       max-width: 720px;
@@ -62,8 +62,32 @@
     .home-version {
       margin-top: 14px;
       font-size: 11px;
-      color: var(--fg-dim);
       font-family: "Press Start 2P";
+      color: var(--fg-dim);
+    }
+
+    /* ===== STATUS ===== */
+    .home-status {
+      margin-top: 18px;
+      font-family: "Press Start 2P";
+      font-size: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      color: var(--fg-dim);
+    }
+
+    .home-status #clock {
+      color: var(--fg);
+    }
+
+    .home-status #battery {
+      color: var(--accent);
+    }
+
+    .status-sep {
+      opacity: 0.4;
     }
 
     /* ===== SEARCH ===== */
@@ -80,13 +104,10 @@
       padding: 18px 22px;
       font-size: 16px;
       border-radius: 16px;
-
       background: rgba(255,255,255,0.03);
       color: var(--fg);
-
       border: 2px solid color-mix(in srgb, var(--accent) 55%, transparent);
       outline: none;
-
       transition: border-color .2s ease, box-shadow .2s ease;
     }
 
@@ -118,7 +139,7 @@
 
 <body>
 
-<!-- SIDE ICON NAV -->
+<!-- SIDE NAV -->
 <nav class="side-header">
   <a href="index.html" class="side-icon" data-icon="home"><img /></a>
   <a href="games.html" class="side-icon" data-icon="games"><img /></a>
@@ -132,20 +153,23 @@
     <div class="home-title">S0LACE</div>
     <div class="home-version">v1.2.0</div>
 
+    <!-- CLOCK + BATTERY -->
+    <div class="home-status">
+      <span id="clock">--:--</span>
+      <span class="status-sep">•</span>
+      <span id="battery">--%</span>
+    </div>
+
     <!-- SEARCH -->
     <div class="proxy-wrap">
       <form id="sj-form">
-        <input
-          id="sj-search-engine"
-          value="https://www.google.com/search?q=%s"
-          type="hidden"
-        />
-        <input
-          id="sj-address"
-          type="text"
-          placeholder="Enter a URL or Search Google"
-          autocomplete="off"
-        />
+        <input id="sj-search-engine"
+               value="https://www.google.com/search?q=%s"
+               type="hidden" />
+        <input id="sj-address"
+               type="text"
+               placeholder="Enter a URL or search Google"
+               autocomplete="off" />
       </form>
 
       <div id="sj-error"></div>
@@ -170,7 +194,7 @@ setInterval(() => {
 }, 500);
 </script>
 
-<!-- SIDE ICON COLOR SYNC -->
+<!-- SIDE ICON SYNC -->
 <script>
 function getAccent() {
   return localStorage.getItem("s0laceAccent") || "gray";
@@ -191,7 +215,32 @@ updateSideIcons();
 window.addEventListener("storage", updateSideIcons);
 </script>
 
-<!-- 🔥 STABLE FIREBASE VISITOR COUNTER -->
+<!-- CLOCK + BATTERY -->
+<script>
+function updateClock() {
+  const d = new Date();
+  const h = d.getHours().toString().padStart(2,"0");
+  const m = d.getMinutes().toString().padStart(2,"0");
+  document.getElementById("clock").textContent = `${h}:${m}`;
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+if ("getBattery" in navigator) {
+  navigator.getBattery().then(battery => {
+    function updateBattery() {
+      document.getElementById("battery").textContent =
+        Math.round(battery.level * 100) + "%";
+    }
+    updateBattery();
+    battery.addEventListener("levelchange", updateBattery);
+  });
+} else {
+  document.getElementById("battery").textContent = "—";
+}
+</script>
+
+<!-- FIREBASE VISITORS (FIXED) -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getDatabase, ref, get, runTransaction } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
@@ -211,30 +260,36 @@ const elWeek = document.getElementById("vis-week");
 
 const todayKey = () => new Date().toISOString().split("T")[0];
 const weekKey = () => {
-  const d = new Date(), j = new Date(d.getFullYear(),0,1);
-  return "week_" + Math.ceil((((d - j) / 86400000) + j.getDay() + 1) / 7);
+  const d=new Date(),j=new Date(d.getFullYear(),0,1);
+  return "week_"+Math.ceil((((d-j)/86400000)+j.getDay()+1)/7);
 };
+
+let incremented = false;
+
+if (!sessionStorage.getItem("s0lace-counted")) {
+  sessionStorage.setItem("s0lace-counted","1");
+  incremented = true;
+  runTransaction(ref(db,"visitors/all"), v => (v||0)+1);
+  runTransaction(ref(db,"visitors/today/"+todayKey()), v => (v||0)+1);
+  runTransaction(ref(db,"visitors/week/"+weekKey()), v => (v||0)+1);
+}
 
 async function render() {
   try {
-    const [a,t,w] = await Promise.all([
+    let [a,t,w] = await Promise.all([
       get(ref(db,"visitors/all")).then(s=>s.val()||0),
       get(ref(db,"visitors/today/"+todayKey())).then(s=>s.val()||0),
       get(ref(db,"visitors/week/"+weekKey())).then(s=>s.val()||0)
     ]);
+
+    if (incremented) { a++; t++; w++; }
+
     elAll.textContent = a;
     elToday.textContent = t;
     elWeek.textContent = w;
   } catch {
     elAll.textContent = elToday.textContent = elWeek.textContent = "—";
   }
-}
-
-if (!sessionStorage.getItem("s0lace-counted")) {
-  sessionStorage.setItem("s0lace-counted","1");
-  runTransaction(ref(db,"visitors/all"), v => (v||0)+1);
-  runTransaction(ref(db,"visitors/today/"+todayKey()), v => (v||0)+1);
-  runTransaction(ref(db,"visitors/week/"+weekKey()), v => (v||0)+1);
 }
 
 render();
