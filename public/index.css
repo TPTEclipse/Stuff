@@ -1936,3 +1936,24 @@ a.game-card img {
   content: none !important;
   display: none !important;
 }
+
+  /* Kill desktop forced box */
+@media (min-width: 768px) {
+  .game-thumb,
+  .media-card {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .game-thumb {
+    height: auto !important;
+    aspect-ratio: auto !important;
+  }
+
+  .game-thumb img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+}
+
