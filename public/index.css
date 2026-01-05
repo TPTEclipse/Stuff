@@ -438,11 +438,6 @@ body {
   z-index: 2;
 }
 
-.game-card:hover .game-thumb {
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6), 
-              0 0 0 2px rgba(255, 255, 255, 0.2); /* Subtle glow border */
-}
-
 .game-card:hover img {
   transform: scale(1.1); /* Zoom effect inside */
 }
@@ -1547,7 +1542,6 @@ h1::after {
   opacity: 1;
 }
 
-.game-card:hover,
 .app-card:hover,
 .media-card:hover {
   transform: translateY(-2px);
