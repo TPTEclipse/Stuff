@@ -2093,3 +2093,8 @@ a.game-card img {
   outline: none !important;
 }
 
+.game-card::before,
+.game-card::after {
+  content: none !important;
+  display: none !important;
+}
