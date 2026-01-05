@@ -18,9 +18,7 @@
       body {
         margin: 0; padding: 0; height: 100%;
         background-color: #0f0f0f;
-        display: flex;
-        overflow: hidden;
-        color: white;
+        display: flex; overflow: hidden; color: white;
       }
 
       .player-main {
@@ -30,24 +28,16 @@
       }
 
       .chat-shell {
-        flex: 1;
-        margin: 15px;
-        background: #050505;
-        border-radius: 20px;
+        flex: 1; margin: 15px;
+        background: #050505; border-radius: 20px;
         border: 2px solid #1a1a1a;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        display: flex; flex-direction: column;
+        overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
       }
 
       #chat-history {
-        flex: 1;
-        overflow-y: auto;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
+        flex: 1; overflow-y: auto; padding: 20px;
+        display: flex; flex-direction: column; gap: 15px;
         scroll-behavior: smooth;
       }
 
@@ -55,89 +45,49 @@
       #chat-history::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
 
       .message {
-        max-width: 85%;
-        padding: 14px 18px;
-        border-radius: 18px;
-        line-height: 1.6;
-        font-size: 14px;
-        word-wrap: break-word;
+        max-width: 85%; padding: 14px 18px; border-radius: 18px;
+        line-height: 1.6; font-size: 14px; word-wrap: break-word;
         position: relative;
       }
 
-      /* Markdown & Code Styling */
       .message pre { background: #000; padding: 15px; border-radius: 10px; overflow-x: auto; border: 1px solid #222; position: relative; }
       .message code { font-family: monospace; color: #e6e6e6; }
+      
       .copy-btn { 
         position: absolute; top: 10px; right: 10px; 
         background: #333; color: #fff; border: none; 
         padding: 4px 8px; border-radius: 5px; cursor: pointer; font-size: 10px; 
       }
 
-      .user-message {
-        align-self: flex-end;
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        color: #fff;
-      }
+      .user-message { align-self: flex-end; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; }
+      .ai-message { align-self: flex-start; background: #111; border: 1px solid #333; color: #eee; }
 
-      .ai-message {
-        align-self: flex-start;
-        background: #111;
-        border: 1px solid #333;
-        color: #eee;
-      }
-
-      .ai-loading {
-        font-family: 'Press Start 2P', cursive;
-        font-size: 8px;
-        color: #00ff7f;
-        margin: 10px 20px;
-        display: none;
-      }
+      .ai-loading { font-family: 'Press Start 2P', cursive; font-size: 8px; color: #00ff7f; margin: 10px 20px; display: none; }
 
       .chat-input-area {
-        padding: 20px;
-        background: #0a0a0a;
-        border-top: 1px solid #1a1a1a;
-        display: flex;
-        gap: 12px;
-        align-items: center;
+        padding: 20px; background: #0a0a0a;
+        border-top: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: center;
       }
 
       #user-input {
-        flex: 1;
-        background: #000;
-        border: 1px solid #333;
-        color: white;
-        padding: 15px;
-        border-radius: 12px;
-        outline: none;
-        font-size: 14px;
+        flex: 1; background: #000; border: 1px solid #333;
+        color: white; padding: 15px; border-radius: 12px; outline: none; font-size: 14px;
       }
 
       .img-btn {
-        background: #111;
-        color: white;
-        border: 1px solid #333;
-        width: 45px; height: 45px;
-        border-radius: 50%;
-        cursor: pointer;
-        display: flex; align-items: center; justify-content: center;
+        background: #111; color: white; border: 1px solid #333;
+        width: 45px; height: 45px; border-radius: 50%;
+        cursor: pointer; display: flex; align-items: center; justify-content: center;
         transition: 0.2s;
       }
       .img-btn:hover { border-color: #fff; }
 
-      #img-preview { height: 40px; border-radius: 5px; display: none; border: 1px solid #00ff7f; }
+      #img-preview { height: 40px; border-radius: 5px; display: none; border: 1px solid #00ff7f; margin-right: 10px; }
 
       #send-btn {
-        background: #fff;
-        color: #000;
-        border: none;
-        padding: 0 25px;
-        height: 45px;
-        border-radius: 12px;
-        font-weight: bold;
-        cursor: pointer;
+        background: #fff; color: #000; border: none;
+        padding: 0 25px; height: 45px; border-radius: 12px;
+        font-weight: bold; cursor: pointer;
       }
     </style>
   </head>
@@ -154,14 +104,14 @@
     <main class="player-main">
       <div class="chat-shell">
         <div id="chat-history"></div>
-        <div id="ai-status" class="ai-loading">GEMINI 2.5 THINKING...</div>
+        <div id="ai-status" class="ai-loading">S0LACE IS THINKING...</div>
         <div class="chat-input-area">
           <input type="file" id="file-input" accept="image/*" style="display:none">
           <button class="img-btn" onclick="document.getElementById('file-input').click()">
             <i data-lucide="paperclip"></i>
           </button>
           <img id="img-preview" src="">
-          <input type="text" id="user-input" placeholder="Ask Gemini (or type /clear)..." autocomplete="off">
+          <input type="text" id="user-input" placeholder="Type here..." autocomplete="off">
           <button id="send-btn">SEND</button>
         </div>
       </div>
@@ -171,9 +121,10 @@
       lucide.createIcons();
 
       const GEMINI_API_KEY = "AIzaSyDEGQ7l66MwgwRVwwfDAszj4f82mYgfHpo";
-      const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+      // Using 1.5-flash for maximum stability with images
+      const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
-      const chatHistoryContainer = document.getElementById('chat-history');
+      const historyBox = document.getElementById('chat-history');
       const userInput = document.getElementById('user-input');
       const sendBtn = document.getElementById('send-btn');
       const aiStatus = document.getElementById('ai-status');
@@ -183,7 +134,6 @@
       let sessionMessages = JSON.parse(localStorage.getItem('solace_chat_history')) || [];
       let currentImageData = null;
 
-      // Handle Image Input
       fileInput.onchange = e => {
         const file = e.target.files[0];
         if(!file) return;
@@ -196,17 +146,6 @@
         reader.readAsDataURL(file);
       };
 
-      function initChat() {
-        if (sessionMessages.length === 0) {
-          renderMessage("Hello. Im S0LACE AI 2.5. How can I help?", 'ai-message');
-        } else {
-          sessionMessages.forEach(msg => {
-            renderMessage(msg.text, msg.role === 'user' ? 'user-message' : 'ai-message');
-          });
-        }
-      }
-
-      // Fast Typing Effect
       async function typeEffect(element, text) {
         let currentText = "";
         const words = text.split(" ");
@@ -214,7 +153,7 @@
           currentText += word + " ";
           element.innerHTML = marked.parse(currentText);
           element.querySelectorAll('pre').forEach(pre => addCopyButton(pre));
-          chatHistoryContainer.scrollTop = chatHistoryContainer.scrollHeight;
+          historyBox.scrollTop = historyBox.scrollHeight;
           await new Promise(r => setTimeout(r, 20)); 
         }
         hljs.highlightAll();
@@ -234,85 +173,88 @@
         pre.appendChild(btn);
       }
 
+      function renderMessage(text, className) {
+        const div = document.createElement('div');
+        div.className = `message ${className}`;
+        if (text) {
+          div.innerHTML = marked.parse(text);
+          div.querySelectorAll('pre').forEach(pre => addCopyButton(pre));
+        }
+        historyBox.appendChild(div);
+        historyBox.scrollTop = historyBox.scrollHeight;
+        hljs.highlightAll();
+        return div;
+      }
+
       async function askAI() {
         const text = userInput.value.trim();
         if (!text && !currentImageData) return;
 
         if (text.toLowerCase() === '/clear') {
           localStorage.removeItem('solace_chat_history');
-          sessionMessages = []; chatHistoryContainer.innerHTML = '';
+          sessionMessages = []; historyBox.innerHTML = '';
           userInput.value = ''; return;
         }
 
-        const userMsgDiv = renderMessage(text || "[Image Sent]", 'user-message');
+        renderMessage(text || "[Image Sent]", 'user-message');
         userInput.value = '';
         aiStatus.style.display = 'block';
 
-        const parts = [{ text: text || "Describe this image." }];
+        const parts = [{ text: text || "Analyze this image." }];
         if (currentImageData) {
           parts.push({ inline_data: { mime_type: "image/jpeg", data: currentImageData } });
         }
+        
         sessionMessages.push({ role: 'user', parts: parts });
 
         try {
           const response = await fetch(API_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-              contents: sessionMessages.map(m => ({
-                role: m.role === 'user' ? 'user' : 'model',
-                parts: m.parts 
-              })) 
-            })
+            body: JSON.stringify({ contents: sessionMessages.map(m => ({ role: m.role, parts: m.parts })) })
           });
 
           const data = await response.json();
-          const aiText = data.candidates[0].content.parts[0].text;
-          
-          aiStatus.style.display = 'none';
-          const aiMsgDiv = renderMessage("", 'ai-message');
-          await typeEffect(aiMsgDiv, aiText);
 
-          sessionMessages.push({ role: 'model', parts: [{ text: aiText }] });
-          localStorage.setItem('solace_chat_history', JSON.stringify(sessionMessages));
+          // FIX: Added safety check to prevent "undefined reading 0"
+          if (data.candidates && data.candidates.length > 0 && data.candidates[0].content) {
+            const aiText = data.candidates[0].content.parts[0].text;
+            aiStatus.style.display = 'none';
+            const aiDiv = renderMessage("", 'ai-message');
+            await typeEffect(aiDiv, aiText);
+            sessionMessages.push({ role: 'model', parts: [{ text: aiText }] });
+            localStorage.setItem('solace_chat_history', JSON.stringify(sessionMessages));
+          } else {
+            throw new Error(data.error ? data.error.message : "Invalid response from AI");
+          }
         } catch (error) {
-          renderMessage("ERROR: " + error.message, 'ai-message');
-        } finally {
           aiStatus.style.display = 'none';
+          renderMessage("SYSTEM ERROR: " + error.message, 'ai-message');
+        } finally {
           currentImageData = null;
           imgPreview.style.display = 'none';
+          fileInput.value = '';
         }
       }
 
-      function renderMessage(text, className) {
-        const msgDiv = document.createElement('div');
-        msgDiv.className = `message ${className}`;
-        if (text) {
-          msgDiv.innerHTML = marked.parse(text);
-          msgDiv.querySelectorAll('pre').forEach(pre => addCopyButton(pre));
-        }
-        chatHistoryContainer.appendChild(msgDiv);
-        chatHistoryContainer.scrollTop = chatHistoryContainer.scrollHeight;
-        hljs.highlightAll();
-        return msgDiv;
-      }
+      sendBtn.onclick = askAI;
+      userInput.onkeydown = e => { if (e.key === 'Enter') askAI(); };
 
-      sendBtn.addEventListener('click', askAI);
-      userInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') askAI(); });
-
-      function getAccent() { return localStorage.getItem("s0laceAccent") || "gray"; }
       function updateSideIcons() {
-        const accent = getAccent();
+        const accent = localStorage.getItem("s0laceAccent") || "gray";
         document.querySelectorAll(".side-icon").forEach(link => {
           const icon = link.dataset.icon;
           const img = link.querySelector("img");
           const isActive = location.pathname.endsWith(link.getAttribute("href"));
-          link.classList.toggle("active", isActive);
           img.src = `thumbs/${icon}/${isActive ? accent : "gray"}.png`;
         });
       }
 
-      initChat();
+      if (sessionMessages.length > 0) {
+        sessionMessages.forEach(m => renderMessage(m.parts[0].text, m.role === 'user' ? 'user-message' : 'ai-message'));
+      } else {
+        renderMessage("# S0LACE AI\nReady for input.", 'ai-message');
+      }
       updateSideIcons();
     </script>
   </body>
