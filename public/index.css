@@ -1475,7 +1475,6 @@ h1::after {
   gap: 14px;
 }
 
-.game-card,
 .app-card,
 .media-card {
   background: var(--panel);
