@@ -18,78 +18,89 @@
     <style>
       body {
         margin: 0; padding: 0; height: 100%;
-        background-color: #0f0f0f;
+        background-color: #0c0c0c;
         display: flex; overflow: hidden; color: white;
       }
 
       .player-main {
         display: flex; flex-direction: column;
         height: 100vh; width: 100%;
-        font-family: sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       }
 
       .chat-shell {
-        flex: 1; margin: 15px;
-        background: #050505; border-radius: 20px;
-        border: 2px solid #1a1a1a;
+        flex: 1; margin: 20px;
+        background: radial-gradient(circle at top left, #111, #050505);
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
         display: flex; flex-direction: column;
-        overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.8);
       }
 
       #chat-history {
-        flex: 1; overflow-y: auto; padding: 20px;
-        display: flex; flex-direction: column; gap: 15px;
+        flex: 1; overflow-y: auto; padding: 25px;
+        display: flex; flex-direction: column; gap: 18px;
         scroll-behavior: smooth;
       }
 
-      #chat-history::-webkit-scrollbar { width: 6px; }
-      #chat-history::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
+      #chat-history::-webkit-scrollbar { width: 4px; }
+      #chat-history::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
 
       .message {
-        max-width: 85%; padding: 14px 18px; border-radius: 18px;
+        max-width: 80%; padding: 16px 20px; border-radius: 20px;
         line-height: 1.6; font-size: 14px; word-wrap: break-word;
-        position: relative;
+        backdrop-filter: blur(10px);
       }
 
-      .message pre { background: #000; padding: 15px; border-radius: 10px; overflow-x: auto; border: 1px solid #222; position: relative; }
-      .message code { font-family: monospace; color: #e6e6e6; }
+      .message pre { background: rgba(0,0,0,0.5); padding: 15px; border-radius: 14px; overflow-x: auto; border: 1px solid rgba(255,255,255,0.1); position: relative; }
       
       .copy-btn { 
         position: absolute; top: 10px; right: 10px; 
         background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.1); 
-        padding: 4px 8px; border-radius: 5px; cursor: pointer; font-size: 10px; backdrop-filter: blur(5px);
+        padding: 5px 10px; border-radius: 8px; cursor: pointer; font-size: 10px; 
+        transition: 0.2s;
       }
+      .copy-btn:hover { background: rgba(255,255,255,0.2); }
 
-      .user-message { align-self: flex-end; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; }
-      .ai-message { align-self: flex-start; background: #111; border: 1px solid #333; color: #eee; }
+      .user-message { align-self: flex-end; background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05)); border: 1px solid rgba(255,255,255,0.2); }
+      .ai-message { align-self: flex-start; background: rgba(20,20,20,0.6); border: 1px solid rgba(255,255,255,0.05); }
 
-      .ai-loading { font-family: 'Press Start 2P', cursive; font-size: 8px; color: #00ff7f; margin: 10px 20px; display: none; }
+      .ai-loading { font-family: 'Press Start 2P', cursive; font-size: 7px; color: #00ff7f; margin: 10px 25px; display: none; text-shadow: 0 0 10px #00ff7f; }
 
       .chat-input-area {
-        padding: 20px; background: #0a0a0a;
-        border-top: 1px solid #1a1a1a; display: flex; gap: 12px; align-items: center;
+        padding: 25px; background: rgba(10, 10, 10, 0.8);
+        backdrop-filter: blur(20px);
+        border-top: 1px solid rgba(255, 255, 255, 0.05); 
+        display: flex; gap: 15px; align-items: center;
       }
 
       #user-input {
-        flex: 1; background: #000; border: 1px solid #333;
-        color: white; padding: 15px; border-radius: 12px; outline: none; font-size: 14px;
+        flex: 1; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.1);
+        color: white; padding: 16px; border-radius: 16px; outline: none; font-size: 15px;
+        transition: 0.3s;
       }
+      #user-input:focus { border-color: rgba(255,255,255,0.3); background: rgba(0,0,0,0.6); }
 
-      /* Glass Buttons */
-      .glass-btn {
-        background: rgba(255, 255, 255, 0.05); color: white; border: 1px solid rgba(255, 255, 255, 0.1);
-        width: 48px; height: 48px; border-radius: 14px;
+      /* iOS 26 Glass Buttons */
+      .ios-btn {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03));
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: white; width: 52px; height: 52px; border-radius: 18px;
         cursor: pointer; display: flex; align-items: center; justify-content: center;
-        transition: 0.2s; backdrop-filter: blur(10px); flex-shrink: 0;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        backdrop-filter: blur(25px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
       }
-      .glass-btn:hover { background: rgba(255, 255, 255, 0.15); border-color: rgba(255, 255, 255, 0.3); }
-      .glass-btn svg { width: 20px; height: 20px; }
+      .ios-btn:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.4); background: rgba(255, 255, 255, 0.15); }
+      .ios-btn:active { transform: scale(0.95); }
 
-      #send-btn { background: #fff; color: #000; border: none; }
-      #send-btn:hover { background: #e0e0e0; }
-      #send-btn.stop-mode { background: #ff4444; color: #fff; }
+      #send-btn.stop-mode {
+        background: linear-gradient(135deg, rgba(255, 59, 48, 0.4), rgba(255, 59, 48, 0.1));
+        border-color: rgba(255, 59, 48, 0.5);
+      }
+      #send-btn.stop-mode i { color: #ff3b30; }
 
-      #img-preview { height: 40px; border-radius: 8px; display: none; border: 1px solid #00ff7f; margin-right: 10px; }
+      #img-preview { height: 45px; border-radius: 12px; display: none; border: 2px solid #fff; box-shadow: 0 0 15px rgba(255,255,255,0.2); margin-right: 5px; }
     </style>
   </head>
 
@@ -105,15 +116,15 @@
     <main class="player-main">
       <div class="chat-shell">
         <div id="chat-history"></div>
-        <div id="ai-status" class="ai-loading">S0LACE IS THINKING...</div>
+        <div id="ai-status" class="ai-loading">S0LACE SYSTEM LINK ACTIVE...</div>
         <div class="chat-input-area">
           <input type="file" id="file-input" accept="image/*" style="display:none">
-          <button class="glass-btn" onclick="document.getElementById('file-input').click()">
+          <button class="ios-btn" onclick="document.getElementById('file-input').click()">
             <i data-lucide="paperclip"></i>
           </button>
           <img id="img-preview" src="">
-          <input type="text" id="user-input" placeholder="Type here..." autocomplete="off">
-          <button id="send-btn" class="glass-btn">
+          <input type="text" id="user-input" placeholder="Neural interface active..." autocomplete="off">
+          <button id="send-btn" class="ios-btn">
             <i data-lucide="send" id="btn-icon"></i>
           </button>
         </div>
@@ -152,8 +163,9 @@
       async function typeEffect(element, text) {
         isTyping = true;
         stopTyping = false;
+        
+        // Switch to Stop UI
         sendBtn.classList.add('stop-mode');
-        lucide.createIcons({attrs: {'data-lucide': 'square'}, nameAttr: 'data-lucide', icons: {square: lucide.Square}});
         btnIcon.setAttribute('data-lucide', 'square');
         lucide.createIcons();
 
@@ -165,15 +177,12 @@
           element.innerHTML = marked.parse(currentText);
           element.querySelectorAll('pre').forEach(pre => addCopyButton(pre));
           historyBox.scrollTop = historyBox.scrollHeight;
-          await new Promise(r => setTimeout(r, 10)); // ULTRA FAST
+          await new Promise(r => setTimeout(r, 8)); // FASTER THAN EVER
         }
         
         hljs.highlightAll();
-        resetSendButton();
-      }
-
-      function resetSendButton() {
         isTyping = false;
+        // Button remains in send mode for next prompt
         sendBtn.classList.remove('stop-mode');
         btnIcon.setAttribute('data-lucide', 'send');
         lucide.createIcons();
@@ -187,7 +196,7 @@
         btn.onclick = () => {
           const code = pre.querySelector('code').innerText;
           navigator.clipboard.writeText(code);
-          btn.innerText = 'DONE';
+          btn.innerText = 'COPIED';
           setTimeout(() => btn.innerText = 'COPY', 2000);
         };
         pre.appendChild(btn);
@@ -221,11 +230,11 @@
           userInput.value = ''; return;
         }
 
-        renderMessage(text || "[Image Sent]", 'user-message');
+        renderMessage(text || "[Neural Image Uploaded]", 'user-message');
         userInput.value = '';
         aiStatus.style.display = 'block';
 
-        const parts = [{ text: text || "Analyze this image." }];
+        const parts = [{ text: text || "Analyze this." }];
         if (currentImageData) {
           parts.push({ inline_data: { mime_type: "image/jpeg", data: currentImageData } });
         }
@@ -241,20 +250,17 @@
 
           const data = await response.json();
 
-          if (data.candidates && data.candidates.length > 0 && data.candidates[0].content) {
+          if (data.candidates && data.candidates[0]) {
             const aiText = data.candidates[0].content.parts[0].text;
             aiStatus.style.display = 'none';
             const aiDiv = renderMessage("", 'ai-message');
             await typeEffect(aiDiv, aiText);
             sessionMessages.push({ role: 'model', parts: [{ text: aiText }] });
             localStorage.setItem('solace_chat_history', JSON.stringify(sessionMessages));
-          } else {
-            throw new Error(data.error ? data.error.message : "Invalid response");
           }
         } catch (error) {
           aiStatus.style.display = 'none';
-          renderMessage("SYSTEM ERROR: " + error.message, 'ai-message');
-          resetSendButton();
+          renderMessage("LINK FAILURE: " + error.message, 'ai-message');
         } finally {
           currentImageData = null;
           imgPreview.style.display = 'none';
@@ -278,7 +284,7 @@
       if (sessionMessages.length > 0) {
         sessionMessages.forEach(m => renderMessage(m.parts[0].text, m.role === 'user' ? 'user-message' : 'ai-message'));
       } else {
-        renderMessage("# S0LACE AI\nHello. Ready for input.", 'ai-message');
+        renderMessage("# S0LACE AI 2.5\nNeural connection established. Awaiting input.", 'ai-message');
       }
       updateSideIcons();
     </script>
