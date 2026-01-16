@@ -24,6 +24,25 @@
     document.documentElement.style.setProperty(n, v);
   }
 
+  // Function to apply custom cursor globally
+function applyCustomCursor() {
+    const style = document.createElement('style');
+    style.innerHTML = `
+        * {
+            cursor: url('thumbs/cursor.png'), auto !important;
+        }
+        
+        /* Optional: Change cursor when hovering over links or buttons */
+        a:hover, button:hover {
+            cursor: url('thumbs/cursor.png'), pointer !important;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+// Run the function
+applyCustomCursor();
+
   /* ===========================================================
       ACCENT COLOR (NOW ALSO UPDATES data-accent FOR ICON SWAP)
      =========================================================== */
