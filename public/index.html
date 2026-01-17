@@ -12,6 +12,7 @@
   <script src="/scram/scramjet.all.js"></script>
   <script src="baremux/index.js" defer></script>
   <script src="epoxy/index.js" defer></script>
+  <script src="register-sw.js" defer></script>
   <script src="search.js" defer></script>
   <script src="index.js" defer></script>
   <script src="global-hub.js" defer></script>
@@ -348,26 +349,7 @@ async function trackLocationOnce() {
 trackLocationOnce();
 </script>
 
-  <script>
-/* === HOMEPAGE STABILITY PATCH === */
 
-// Fix invalid URL crashes (safe version)
-const _URL = window.URL;
-window.URL = function(u, b) {
-  try { return new _URL(u, b); }
-  catch { return new _URL(location.href); }
-};
-window.URL.prototype = _URL.prototype;
 
-// Clean up broken service workers ONCE
-if (!sessionStorage.getItem("__sw_cleaned")) {
-  sessionStorage.setItem("__sw_cleaned", "1");
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.getRegistrations?.().then(r =>
-      r.forEach(reg => reg.unregister())
-    );
-  }
-}
-</script>
 </body>
 </html>
