@@ -100,6 +100,48 @@ applyCustomCursor();
     if (cfg.enabled) applyTabCloak(cfg, false);
   }
 
+  (() => {
+  if (window.__GLOBAL_LOADER__) return;
+  window.__GLOBAL_LOADER__ = true;
+
+  const overlay = document.createElement("div");
+  overlay.id = "loading-overlay";
+
+  overlay.innerHTML = `
+    <div class="loading-box">
+      <div class="spinner"></div>
+      <p id="loading-text"></p>
+    </div>
+  `;
+
+  document.addEventListener("DOMContentLoaded", () => {
+    document.body.appendChild(overlay);
+
+    const messages = window.LOADER_MESSAGES || ["Loading…"];
+    const text = overlay.querySelector("#loading-text");
+
+    text.textContent =
+      messages[Math.floor(Math.random() * messages.length)];
+
+    // Hide after full load
+    window.addEventListener("load", () => {
+      hideLoader();
+    });
+  });
+
+  window.showLoader = () => {
+    overlay.classList.remove("hidden");
+    const messages = window.LOADER_MESSAGES || ["Loading…"];
+    overlay.querySelector("#loading-text").textContent =
+      messages[Math.floor(Math.random() * messages.length)];
+  };
+
+  window.hideLoader = () => {
+    overlay.classList.add("hidden");
+  };
+})();
+
+
   /* ===========================================================
       THEME
      =========================================================== */
