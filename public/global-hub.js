@@ -127,7 +127,7 @@ applyCustomCursor();
     window.addEventListener("load", () => {
   setTimeout(() => {
     hideLoader();
-  }, 3000); // extra 3 seconds
+  }, 1500); // extra 3 seconds
 });
 
   });
