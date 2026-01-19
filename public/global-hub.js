@@ -125,8 +125,11 @@ applyCustomCursor();
 
     // Hide after full load
     window.addEventListener("load", () => {
-      hideLoader();
-    });
+  setTimeout(() => {
+    hideLoader();
+  }, 3000); // extra 3 seconds
+});
+
   });
 
   window.showLoader = () => {
