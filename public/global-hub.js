@@ -159,6 +159,34 @@ applyCustomCursor();
     return t;
   }
 
+  (() => {
+  // Prevent showing again if dismissed
+  if (localStorage.getItem("announcementDismissed")) return;
+
+  const announcement = document.createElement("div");
+  announcement.id = "global-announcement";
+
+  announcement.innerHTML = `
+    s0lace.fly.dev link will be shut down on Feb 1st. https://s0lace-qug8.onrender.com will be the new main link.
+    <span class="read-more">Read more</span>
+  `;
+
+  // Click on announcement body → close
+  announcement.addEventListener("click", () => {
+    localStorage.setItem("announcementDismissed", "true");
+    announcement.remove();
+  });
+
+  // Click on "Read more" → go to updates page
+  announcement.querySelector(".read-more").addEventListener("click", (e) => {
+    e.stopPropagation();
+    window.location.href = "/updates.html";
+  });
+
+  document.body.appendChild(announcement);
+})();
+
+
   /* ===========================================================
       BACKGROUND
      =========================================================== */
