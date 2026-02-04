@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: s0lace
+    name: Stuff
     env: docker
     plan: free # Optional: defaults to starter/standard depending on account, 'free' is good for testing
     dockerfilePath: ./Dockerfile
