@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: Stuff
+    name: CERER
     env: docker
     plan: free # Optional: defaults to starter/standard depending on account, 'free' is good for testing
     dockerfilePath: ./Dockerfile
